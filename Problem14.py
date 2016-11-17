@@ -1,50 +1,78 @@
 #Problem: 	What starting number under one million produces the longest Collatz sequence? (Collatz sequence is: if x is odd -> 3x+1; otherwise -> x/2)
 
 import math
-import os
 
 
-def doCollatz(collatzArray):
-	c = list(collatzArray)
-	if c[0]%2:
-		c[0] = c[0]*3+1
+def doCollatz(num):
+	#determines next number of x according to collatz sequence
+	c = num
+	if c%2:
+		c = c*3+1
 	else:
-		c[0] = int(c[0]/2)
-	c[1] += 1
+		c = int(c/2)
 	return c
 
 def generateTreePositions(size):
+	#creates a list of numbers and their collatz sequence lengths of length <size>
 	tr = []
 	for i in range(0, size):
-		tr.append([i+1,-1])
+		tr.append([i+1, 0])
 	return tr
 
 
-def lengthCollatz(collatzTree, collatzArray):
+def findNextCollatzUnder(x, cap):
+	#finds the next collatz number under a cap
+	c = doCollatz(x)
+	ctr = 1
 	
-	indx = -1
-	for i in range(0, len(collatzTree))
-		if collatzTree[i][0] == collatzArray[0]:
-			indx = i
-			break
-	if ind
-	collatzArray[1] += 1+lengthCollatzCollatz(collatzTree, collatzArray)[1]
-	#while not(collatzArray[0] in collatzTree):
-	#	doCollatz(collatzArray)
+	while c > cap:
+		c = doCollatz(c)
+		ctr += 1
+	return [c, ctr] 
+
+
+def lengthCollatz(collatzTree, num):
+	#finds the collatz sequence length of a number (and stores all of the other numbers reached but below the size of the tree)
+	treeLength = len(collatzTree)
+	if num > 1:
+
+		tmp = findNextCollatzUnder(num, treeLength)
+		colNum = tmp[0]
+		extraLength = tmp[1]
+
+		if collatzTree[num-1][1] <= 0:
+
+			if collatzTree[colNum-1][1] <= 0 and colNum > 1:
+				lengthCollatz(collatzTree, colNum)
+			
+			collatzTree[num-1][1] = extraLength+collatzTree[colNum-1][1]
+			#print("here2", num, collatzTree[num-1][1])
+		
+	
 
 
 
 def main():
-	#sum up each digit, right to left, keeping track of the carry and the digit obtained
-	#At the end, tack on the remaining carry and grab the last ten numbers in reverse order from the digits array
-	c = [4,0]
-	doCollatz(c)
-	print(doCollatz(c), c)
-	collatzTree = []
-	#for i in range(1,1000000):
-
-		
+	#we just check every number, remembering all of the other numbers we hit: this allows
+	#us to not have to recheck any. Remembering only happens under the size we care about (1 million): if a number gets too high
+	#we have to resize the tree and we end up storing way too many things
+	#then we find the longest
 	
+	maxLength = 1000000
+
+	collatzTree = generateTreePositions(maxLength)
+	#print(findNextCollatzUnder(3, 9))
+
+	for i in range(1,maxLength+1):
+		lengthCollatz(collatzTree, i)
+		
+	longest = [0,0]
+	
+	for i in range(0,maxLength):
+		if collatzTree[i][1] > longest[1]:
+			longest = [i+1, collatzTree[i][1]]
+	print("result:", longest)
+
 
 
 

@@ -1,6 +1,6 @@
 #Problem: 	what is the difference of the sum of the squares of the first 100 natural numbers 
 #			and the square of the sums of the first 100 natural numbers?
-#			or, find s where s = (1+2+3+4+...+99+100)^2 - (1^2+2^2+3^2+...+99^2+100^2)
+#			Or, find s where s = (1+2+3+4+...+99+100)^2 - (1^2+2^2+3^2+...+99^2+100^2)
 
 
 

@@ -3,7 +3,7 @@
 import math
 
 def main():
-#simple approach: cut by the smallest factor (always a prime) until the number is 1. record the largest factor, which is prime -- that is that largest prime factor
+#simple approach: cut by the smallest non-1 factor (always a prime) until the number is 1. record the largest factor, which is prime -- that is that largest prime factor
 	largest = 0;
 	prime = 0
 	num = 600851475143

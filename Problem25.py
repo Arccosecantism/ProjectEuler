@@ -10,6 +10,7 @@ def main():
 	#Also, log10(x) = y means x has floor(y) digits. So, 999 <= log10((((1+sqrt5)/2)^n-((1-sqrt5)/2)^n)/(sqrt5)). Since n is likely large, ((1-sqrt5)/2)^n) is 0.
 	#also, let phi = (1+sqrt5)/2 
 	#then 999 <= log10(phi^n/(sqrt5)) and 999 <= n*log(phi) - log10(sqrt5) and n >= (999+log10(sqrt5))/log(phi) so the smallest n is n = ceil((999+log10(sqrt5))/log(phi))
+	tic = time()
 	dignum = 1000
 	rdignum = dignum-1
 	phi = (1+math.sqrt(5))/2

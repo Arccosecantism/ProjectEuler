@@ -5,7 +5,7 @@ import math
 from time import time
 
 def sieveOfEratosthenes(x):
-    #Produces a list of numbers under x, also tellis if they are prime.
+    #Produces a list of numbers under x, also tells if they are prime.
     #this is to create an O(1) prime checker for primes under x 
     ar = []
     for i in range(0,x):

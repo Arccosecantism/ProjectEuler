@@ -92,9 +92,9 @@ def findUniquesInFamily(fam, cap):
 
 
 def main():
- #This is quite easy -- the diagonals are sums of odd squares minus a multiple of 2, which is (2n-1)(2n)(2n+1)/6
- #We jsut count up the square sums and subtract off the multiples of 2, and subtract 3 because having one 1 in the center 
- #is weird and throws things off. Takes 0.0 seconds to execute
+ #This is a pretty awkward way to solve this, but I think it is pretty efficient: We first procure a list of numbers under 100
+ #that have no powers in them (no squares, cubes, etc.). Then we look at each one for the number of unique numbers produced by
+ #raising it or a power of itself to a nubmer between 2 and 100. We simply count these up. Executes in 25-50 milliseconds
 	tic = time()
 	num = 100
 	uniques = 0

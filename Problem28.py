@@ -14,7 +14,7 @@ from time import time
 def main():
     #This is quite easy -- the diagonals are sums of odd squares minus a multiple of 2, which is (2n-1)(2n)(2n+1)/6
     #We jsut count up the square sums and subtract off the multiples of 2, and subtract 3 because having one 1 in the center 
-    #is weird and throws things off 
+    #is weird and throws things off. Takes 0.0 seconds to execute
     tic = time()
     n = 1001
     rn = (n+1)/2

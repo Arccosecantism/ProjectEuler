@@ -33,6 +33,7 @@ def isPrime(x, soe):
         return 1
     else:
         return 0
+        
 def addLists(listlist):
     #combines a list of lists into one list with all the elements
     #for a([[3,4,5],[1,6],[],[0,0]]), the result is [3,4,5,1,6,0,0]

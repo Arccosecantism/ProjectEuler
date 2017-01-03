@@ -1,7 +1,7 @@
 #Problem: Consider all fractions (not necessarily simplified) less than 1 that have numerators and denominators that are 2 digits long.
 #          There are exactly four that can be reduced an incorrect, childish way; by cancelling digits instead of factors. For example:
-#           one such fraction is 49/98. by cancelling the 9s, we see that 49/98=4/8. When all four of thesse fractions are multiplied
-#           together and fulyl simplified, what is the value of the denominator? 
+#           one such fraction is 49/98. By cancelling the 9s, we see that 49/98=4/8. When all four of these fractions are multiplied
+#           together and fully simplified, what is the value of the denominator? 
 
 import math
 from time import time
@@ -17,8 +17,8 @@ def gcf(a,b):
         return gcf(fb, mod)
 
 def findVals(x,z):
-    #about 10 minutes of algebra reveals that if a fraction can be simplified by cancelling digits;
-    #that is, if (10x+y)/(10y+z)=x/z, then y = 9xz/(10x-z). This is what this function does
+    #about 10 minutes of algebra reveals this about fractions that can be simplified by cancelling digits;
+    #If (10x+y)/(10y+z)=x/z, then y = 9xz/(10x-z). This ifunction returns y
     fx = float(x)
     fz = float(z)
     return float(9*fx*fz/(10*fx-fz))

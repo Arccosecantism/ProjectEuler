@@ -1,21 +1,24 @@
 
+#Problem:   The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage:
+#           3797, 797, 97, and 7. Similarly we can work from right to left: 3797, 379, 37, and 3. Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+#           By the way: 2, 3, 5, and 7 are not considered to be truncatable primes.
+
+
 import math
 from time import time
 
 def digitsToInt(intList):
     #converts a list of digits to integers: d([4,6,1,3]) = 4613
-    strnum = ""
-    for i in intList:
-        strnum += str(i)
-    return int(strnum)
+    num = int(''.join(map(str,intList)))
+    return num
 
 def addLists(listlist):
     #combines a list of lists into one list with all the elements
     #for a([[3,4,5],[1,6],[],[0,0]]), the result is [3,4,5,1,6,0,0]
     retlist = []
+    
     for i in range(0,len(listlist)):
-        for k in range(0,len(listlist[i])):
-            retlist.append(listlist[i][k])
+            retlist += listlist[i]
     return retlist   
 
 def sieveOfEratosthenes(x):
@@ -71,9 +74,11 @@ def getPossiblePrimeDigits(amt):
     return startSet
 
 def checkDigitListIsPrime(diglist, soe):
+    #checks if digits make a prime number
     return isPrime(digitsToInt(diglist), soe)
 
 def checkLeftTrunc(flist, soe):
+    #checks if a number is left-truncatably prime
     isPrime = 1
     ml = len(flist)
     ctr = 0
@@ -85,6 +90,7 @@ def checkLeftTrunc(flist, soe):
     return isPrime
 
 def checkRightTrunc(flist, soe):
+    #checks if a number is right-truncatably prime
     isPrime = 1
     ml = len(flist)
     ctr = 0
@@ -98,7 +104,10 @@ def checkRightTrunc(flist, soe):
 
 
 def main():
-    
+    #The strategy: We first notice that all of the digits except the leftmost must be 1,3,7,or 9 and we know the rightmost has to be 2,3,5,or 7 because by truncating, each digits
+    #will end up being the last one. We create all the possible combinations of {2,3,5,7} followed by 1-5 amount of {1,3,7,9}. Then we simply check if the number is left and right truncatable.
+    #Also, we just assume all the numbers are under 1000000 -- it turns out that there are 11 truncatable primes under 1000000, so we know we are done, but I suppose there is technically not
+    #guarantee. Execution time is 3.7 seconds
     t0 = time()
     sieve = sieveOfEratosthenes(1000000)
     cap = 6
@@ -107,11 +116,9 @@ def main():
         tmpset = getPossiblePrimeDigits(i)
         primePos.append(tmpset)
     primePos = addLists(primePos)
-
     ssum = 0
     for i in primePos:
         if checkLeftTrunc(i, sieve) and checkRightTrunc(i, sieve):
-            #print(i)
             ssum += digitsToInt(i)
 
     print("time Elapsed:", time()-t0)

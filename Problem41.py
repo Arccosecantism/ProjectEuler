@@ -1,4 +1,5 @@
-
+#Problem: An integer is pandigital n if it contains the digits 1-n exactly once in its decimal representation. so 2143 is pandigital 4. 
+#         2143 is also prime, so 2134 is a pandigital prime. What is the largest pandigital prime that exists?
 import math
 from time import time
 
@@ -20,6 +21,7 @@ def sieveOfEratosthenes(x):
     return ar
 
 def getPrimeListUnder(x, soe):
+    #gets a prime list under x, using a sieve
     primelist = []
     for i in range(0,x):
         if soe[i] == 0:
@@ -27,9 +29,12 @@ def getPrimeListUnder(x, soe):
     return primelist
 
 def goodSqrt(x):
+    #returns the squareroot, but rounded up to a very careful degree to avoid rounding errors
     return int(math.ceil(math.sqrt(x))+1)
 
 def isPrimeL(x, plist):
+    #checks if a number that has prime factors in prime list is prime -- good for checking large numbers
+    #if a number is too large, the sieve of eratosthenes takes too long to generate, so we can't have an O(1) check
     prime = 1
     for i in plist:
         if not(x%i):
@@ -44,8 +49,11 @@ def getReverseList(flist):
 	return revlist
 
 def multiplyLists(alist, listlist):
+    #this is weird: it takes a list and a list of lists, and returns a list of lists which is the pairing
+    #of the firs list with every element of the second list. It's hard to explain, so here is an example:
+    # m([1,4,3], [[2,4], [], [1,3,5], [0,0]]) = [[1,4,3,2,4], [1,4,3,2,4], [1,4,3], [1,4,3,1,3,5], [1,4,3,0,0]]
+    #this is only useful for some recursive functions
     nlist = []
-    #print(alist, listlist)
     for i in range(0,len(listlist)):
         tmplista = list(alist)
         tmplistb = list(listlist[i])
@@ -53,6 +61,8 @@ def multiplyLists(alist, listlist):
     return nlist
 
 def getBackwardsPandigitalPrimeCandidates(numList, first):
+    #gets all candidates for padigital primes out of a numberlist, but they are reversed.
+    #it represents these numbers as a decimal digit list
     nlist = []
     empty = 1
     for k in numList:
@@ -76,6 +86,10 @@ def getBackwardsPandigitalPrimeCandidates(numList, first):
     return nlist          
 
 def getPandigitalPrimeCandidates():
+    # gets all candidates for pandigital primes
+    #we only do 4-digit numbers and 7-digit numbers, because no other pandigital n numbers are definitely not prime:
+    #if a number is pandigital 9, for instnace, the sum of the digits is always 45, a multiple of 3, so it's divisible by 3.
+    #the same is true for  a pandigital x number where x is in {2,3,5,6,8}
     numlist_4 = []
     for i in range(1,5):
         numlist_4.append([i,1])
@@ -102,6 +116,10 @@ def getPandigitalPrimeCandidates():
     return totcand_i
 
 def main():
+    #the strategy: we generate all possible pandigital primes. a possible pandigital prime is an ordering of 1-n where n = 4 or 7, and the last digit is 1,3,7, or 9.
+    #so 1234 is not a possible pandigital prime, but 2341 is. 15243 is not. Then we just check each one if it's prime, and store the largest
+    #
+
     t0 = time()
     cap = 8000000
     pandigPrimeCand = getPandigitalPrimeCandidates()

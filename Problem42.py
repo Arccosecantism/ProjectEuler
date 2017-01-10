@@ -1,3 +1,7 @@
+#Problem: a triangle number is a number that can be written as n(n+1)/2. For a word, the word value is the sum of the alphabetical 
+#placement of the letters in the word. So "SKY" is 19+11+25 = 55. This happens to be a triangle number. How many of the words in the given list
+#of words have triangular word values?
+
 import math
 import os
 from time import time
@@ -21,23 +25,10 @@ def getWordList():
 		names[i] = removeNonAlphabetical(names[i])
 	return names
 
-def getTriangleList(x):
-    ar = []
-    for i in range(0,x):
-        ar.append(0)
-    ctr = 0
-    tri = 0
-    while tri < x:
-        ar[tri]=1
-        ctr+=1
-        tri+=ctr
-    return ar
-
-def isTriangular(x,trilist):
-    trian = 0
-    if trilist[x] == 1:
-        trian = 1
-    return trian
+def isTriangular(x):
+    if math.sqrt(8*x+1)%2 == 1:
+        return 1
+    return 0
 
 def getWordSum(word):
     ssum = 0
@@ -48,12 +39,11 @@ def getWordSum(word):
 def main():
     t0 = time()
     wordList = getWordList()
-    triagleList = getTriangleList(600)
     #print(wordList)
     #print(triagleList)
     count = 0
     for i in wordList:
-        if isTriangular(getWordSum(i), triagleList):
+        if isTriangular(getWordSum(i)):
             count += 1
     print("Time Elapsed:", time()-t0)
     print(count)

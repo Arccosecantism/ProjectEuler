@@ -1,4 +1,4 @@
-
+#Problem: In the file of pairs of poker hand given, how many hands does player 1 win?
 
 import math
 from time import time
@@ -6,12 +6,10 @@ import os
 
 def getHands():
     #reads the files and provides the list of strings
-    print(os.getcwd())
     f = open("TextFiles\PokerHandsProblem54.txt", 'r')
     lines = f.readlines()
     for i in range(0, len(lines)):
         lines[i] = lines[i][:-1]
-    print("Going:", lines)
     dHands = [i.split(" ") for i in lines]
     hands = []
     for i in dHands:
@@ -20,9 +18,10 @@ def getHands():
 
 
 def getCardData(cardStr):
+    #Translates a Rank and suit into numerical values: e.g., "AS" -> [14, 3] becase an ace is 14 and spades are the 
+    #largest of the fours suits
     rank = -1
     cr = cardStr[0]
-    #print(cr)
     if cr == 'T':
         rank = 10
     elif cr == 'J':
@@ -34,9 +33,7 @@ def getCardData(cardStr):
     elif cr == 'A':
         rank = 14
     else:
-        
         rank = ord(cr)-ord('0')
-        #print("number", rank)
     
     suit = -1
     cs = cardStr[1]
@@ -53,12 +50,14 @@ def getCardData(cardStr):
 
 
 def interpretHand(hand):
+    #translates all cards in a five-card hand
     handData = []
     for i in hand:
         handData.append(getCardData(i))
     return handData
 
 def interpretHandList(handlist):
+    #translates all hands in a list of hand-pairs
     handData = []
     for i in handlist:
         handData.append([])
@@ -67,6 +66,7 @@ def interpretHandList(handlist):
     return handData
 
 def rankHand(hand):
+    #ranks a hand -- really annoying to make this; there is so much tedious testing and cases and logic
 
     winA = 0
     winB = 0
@@ -167,6 +167,7 @@ def rankHand(hand):
     return [winA, winB, winC]
 
 def compareHandPair(handa, handb):
+    #Compares two hands to see who wins
     hra = rankHand(handa)
     hrb = rankHand(handb)
 
@@ -187,17 +188,23 @@ def compareHandPair(handa, handb):
             if ara[i] > arb[i]:
                 bigger = 1
                 break
+            elif ara[i] < arb[i]:
+                break
         
-    print(bigger, hra, hrb)
+   
     return bigger
                 
 def main():
+    #The Stratetgy: No way except brute-force. Simply get all the hands, interpret them, and test and compare them.
+    #
+    #Executes in .063 seconds
+    t0 = time()
     handPairList = interpretHandList(getHands())
-    #print(rankHand(interpretHand(["2H","2D","4C", "4D","4S"])))
     ssum = 0
     for i in handPairList:
         ssum += compareHandPair(i[0], i[1])
     
+    print ("Time Elapsed:", time()-t0)
     print(ssum)
 
 main()

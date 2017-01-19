@@ -1,7 +1,15 @@
+#Problem: Project euler explains this well: Copy-paste:
+#           It can be seen that the number, 125874, and its double, 251748, contain exactly the same digits, 
+#           but in a different order.
+
+#           Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
+
+
 import math
 from time import time
 
 def digitListListToNumList(diglistlist):
+    #Converts a list of digit-lists to a list of ints
     nlist = []
     for i in diglistlist:
         num = int(''.join(map(str,list(i))))
@@ -9,6 +17,8 @@ def digitListListToNumList(diglistlist):
     return nlist
 
 def removeDuplicates(lst):
+    #gives a new list that removes all duplicates from a list
+    #RD([1,3,3,4,3,5,5]) = [1,4,3,5] -- does preserve order, but in a backwards way
     nlist = []
     for i in lst:
         dup = 0
@@ -22,6 +32,8 @@ def removeDuplicates(lst):
 
 
 def generateCoreNumbers(length, start):
+    #recursively generates all the possible non-first digits of a number that would work
+    #This is based on what the first digits of x, 2x, 3x, 4x, 5x, 6x can be
     pos = []
     if length <= 1 or start > 9:
         pos = [[]]
@@ -41,10 +53,12 @@ def generateCoreNumbers(length, start):
     return pos
 
 def generateSubsets(siz, numlist):
+    #generates subsets of size <siz> from a list of numbers. This list of numbers is in a weird
+    #format that helps the recursion 
     newlist = []
     if siz > 0:
         for i in range(0,len(numlist)):
-            if numlist[i][1] == 1 and len(numlist)-i >= siz :
+            if numlist[i][1] == 1 and len(numlist)-i >= siz:
                 for k in range(0,i+1):
                     numlist[k][1] = 0 
                 nextstep = generateSubsets(siz-1, numlist)
@@ -60,9 +74,9 @@ def generateSubsets(siz, numlist):
     return newlist
 
 def getStartingNumbers(length):
+    #Gets the full list of numbers that, in some order, combine to make the a possible number
     snum = []
     if length > 6:
-       # print("Got Here")
         cores = generateCoreNumbers(6,2)
         numlist = [[x,1] for x in range(0,10)]
         extras = generateSubsets(length-6, numlist)
@@ -80,6 +94,7 @@ def getStartingNumbers(length):
 
 
 def getSpecialIntListPermutations(numlist, sixIssue):
+    #Gets all permutations (orderings) of a number list, with a bit of specialization for this problem
     perms = []
     empty = 1
     for i in numlist:
@@ -101,6 +116,7 @@ def getSpecialIntListPermutations(numlist, sixIssue):
     return perms
 
 def generatePossibleNumbers(length):
+    #Generates all candidate numbers -- Numbers that are under 16666..., have possible digits, etc.
     starters = getStartingNumbers(length)
     reformStart = []
     for i in starters:
@@ -130,6 +146,7 @@ def generatePossibleNumbers(length):
     return retdig
 
 def testSameDigits(x,y):
+    #Tests if two numbers have the same digits
     lx = list(str(x))
     lx.sort()
     ly = list(str(y))
@@ -139,6 +156,7 @@ def testSameDigits(x,y):
     return 0
 
 def testNumber(x):
+    #tests a number x to see if x, 2x, 3x, 4x, 5x, and 6x all share the smae digits
     t0 = time()
     mult = 2
     good = 1
@@ -149,17 +167,21 @@ def testNumber(x):
 
 
 def main():
+    #Strategy: For each amoutn of digits, from 6 to 9, iclusive, generate all possible numbers and then test them.
+    #Keep track of the smallest
+    # 
+    # Executes in .032 seconds 
     t0 = time()
-    #print(removeDuplicates([1,1,2,3,1,6,3,3,6,8,9,7,7,8]))
-    possibleNums = generatePossibleNumbers(6)
-    smallest = 10**6
-    for i in possibleNums:
-        if testNumber(i):
-            print(i)  
-            if i < smallest:
-                smallest = i
+    for dig in range(6,10):
+        possibleNums = generatePossibleNumbers(dig)
+        smallest = 10**dig
+        for i in possibleNums:
+            if testNumber(i):
+                if i < smallest:
+                    smallest = i
+        if smallest != 10**dig:
+            break
 
-    #print("here", possibleNums, len(possibleNums))
     print("Time Elapsed", time()-t0)
     print(smallest)
 main()

@@ -1,3 +1,5 @@
+#Problem: Which number under one million can be represented as the longest sum of consecutive primes
+
 import math
 from time import time
 
@@ -19,12 +21,14 @@ def sieveOfEratosthenes(x):
     return ar
 
 def isPrime(x, soe):
+    #O(1) Prime checker
     prime = 1
     if soe[x] == 1:
         prime = 0
     return prime
 
 def getPrimeList(soe):
+    #gets all of the primes from a sieve of erastothenes
     primelist = []
     for i in range(0,len(soe)):
         if soe[i] == 0:
@@ -33,6 +37,15 @@ def getPrimeList(soe):
 
 
 def main():
+    #The Strategy: First, we find the maximum number of consecutive primes that, when added together, are less than
+    #one million. Then we start at that many primes, and count down, removing one prime each time, all the while
+    #testing all possilbe "runs." We do this until the sum of a run is prime, and then we stop. Also, because runs
+    #share many numbers, when moving from one run to the next, the new number is added and the lost number is
+    #subtracted -- the whole sum is not re-computed. Finally, because all non-2 primes are odd and the sum of the 
+    #consecutive primes must be prime and thus odd, if the amount of primes being tested is eve, 2 must be a part of
+    #the run
+
+    #Executes in 0.98 seconds
     t0 = time()
     sieve = sieveOfEratosthenes(1000000)
     plist = getPrimeList(sieve)
@@ -40,10 +53,16 @@ def main():
     longestChain = 0
     done = 0
     pnum = 0
-    stval = 999
+    stval = 0
+    ctr = 0
+    while stval < 1000000:
+        stval += plist[ctr]
+        ctr+= 1
+    print(ctr)
+    ctr -= 1
     
-    for i in range(0,stval):
-        ti = stval-i
+    for i in range(0,ctr):
+        ti = ctr-i
         if ti%2 == 1:
             ssum = 0
             for k in range(1,ti+1):

@@ -1,3 +1,7 @@
+#Problem: There are 2 sets of 3 4-digit numbers that are an arithmetic sequence, are all prime, and are permutations
+#           of each other in base 10. One is {1487, 4817, 8147}. What is the other one?
+
+
 import math
 
 from time import time
@@ -20,12 +24,14 @@ def sieveOfEratosthenes(x):
     return ar
 
 def isPrime(x, soe):
+    #O(1) prime checker
     prime = 1
     if soe[x] == 1:
         prime = 0
     return prime
 
 def numToDigitAmounts(x):
+    #breaks a number up into an array of digit amounts -- so N(15224233) = [[1,1], [2,3], [3,2], [4,1], [5,1]]
     sx = str(x)
     ar = []
     prev = -1
@@ -39,8 +45,9 @@ def numToDigitAmounts(x):
     return ar
 
 def multiplyLists(alist, listlist):
+    #confusing: takes a list and a list of lists and combines them in a multiplicative way:
+    #M([3,2,1], [[0,4,5], [], [1,2]]) = [[3,2,1,0,4,5], [3,2,1], [3,2,1,1,2]]
     nlist = []
-    #print(alist, listlist)
     for i in range(0,len(listlist)):
         tmplista = list(alist)
         tmplistb = list(listlist[i])
@@ -48,6 +55,8 @@ def multiplyLists(alist, listlist):
     return nlist
 
 def getPermutations(numList):
+    #recursively gets all permutations with no duplicates of an array describing the amount of digits.
+    #So GP([[1,1],[3,2]]) = [[1,3,3], [3,1,3], [3,3,1]]
     nlist = []
     empty = 1
     for k in numList:
@@ -65,6 +74,7 @@ def getPermutations(numList):
     return nlist
 
 def digitListListToNumList(diglistlist):
+    #Turns a list of digit lists into a list of integers
     nlist = []
     for i in diglistlist:
         num = int(''.join(map(str,list(i))))
@@ -72,9 +82,14 @@ def digitListListToNumList(diglistlist):
     return nlist
 
 def getNumericalPermutations(x):
+    #combines some previous functions -- gets all base 10 permutions of a number
+    #So GN(1332) = [1233, 1323, 1332, 2133, 2313, 2331, 3123, 3132, 3213, 3231, 3312, 3321]
+    #(not necessarily in this order)
     return digitListListToNumList(getPermutations(numToDigitAmounts(x)))
 
 def getLargerPrimePermutations(x, soe):
+    #Out of a list of numerical permutation of a number x, gets the ones
+    #that are both larger and prime
     n_perms = getNumericalPermutations(x)
     p_perms = []
     for i in n_perms:
@@ -83,6 +98,8 @@ def getLargerPrimePermutations(x, soe):
     return p_perms
     
 def getPermutationSeries(x, soe):
+    #Out of list of numbers (that happen to be larger prime permutations of x),
+    #Picks all possible subsets that have size three and include x.
     pser = []
     perms = getLargerPrimePermutations(x, soe)
     perms.sort()
@@ -92,13 +109,18 @@ def getPermutationSeries(x, soe):
     return pser
 
 def checkIfArithmetic(series):
+    #Checks if a series is arithmetic
     if series[2]-series[1] == series[1]-series[0]:
         return 1
     return 0
 
 def main():
+    #The Strategy: Check all prime 4-digit numbers k by getting the larger prime permutations of k, getting all
+    #3-large subsets containing k and checking if they are arithmetic progressions. If there is one, keep k
+
+    #Executes in 
     t0 = time()
-    sieve = sieveOfEratosthenes(1000000)
+    sieve = sieveOfEratosthenes(10000)
     done = 0
     goodSeries = []
     for i in range(1001,9999,2):

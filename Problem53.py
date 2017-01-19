@@ -1,7 +1,16 @@
+#Problem: How many value pairs of n and k for 1 <= n <= 100, 0 <= k <= n are there
+#           such that (n choose k) (n!/(k!(n-k)!)) is over 1000000 (one million)?
 import math
 from time import time
 
 def main():
+    #The Strategy: We first notice that in Pascal's triangle, if a value x is greater than some y,
+    #all values in a triangle pattern below x are also greater than y. So we start with the initial number 
+    #of values > 1000000 by finding the first value, 23choose10, and making a trapezoid shape out of this.
+    #Then we go through the remainingrows of Pascls triangle, and iff a new value is greater than 1000000
+    #outside the trapezoid, we tack on two strips that abut the trapezoid. We do this untill all rows are completed.
+    # 
+    #Execution time is 0.001 seconds
     t0 = time()
     bn = 23
     bk = 10

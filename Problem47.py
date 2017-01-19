@@ -1,10 +1,11 @@
+#Problem: What is the first of the first four consecutive integers that have exactly 4 distinct prime factors?
+
 import math
 from time import time
 
 
 def modSieveOfEratosthenes(x):
-    #Produces a list of numbers under x, also tells if they are prime.
-    #this is to create an O(1) prime checker for primes under x 
+    #Produces a list of numbers under x, also tells how many prime factors they have
     ar = []
     for i in range(-1,x):
         ar.append(0)
@@ -21,6 +22,12 @@ def modSieveOfEratosthenes(x):
 
 
 def main():
+    #The strategy: THe first time I solved this, I did a really inefficient brute-force method, but then I saw
+    #someone in the project Euler forums talk about modifying a sieve of eratostenes. I realized that was much
+    #better, so I re-did the problem using the modified sieve. We simply generate a sieve that tells us how many
+    #prime factors each composite number has, and then we coutn up, checking for 4 4's in a row.
+
+    #Executes in  1.436 seconds -- still slower than I'd like
     t0 = time()
     msieve = modSieveOfEratosthenes(1000000)
 

@@ -1,3 +1,5 @@
+#Problem: What is the smallest odd composite number that cannot be written as the sum of a prime and twice a square?
+
 import math
 from time import time
 
@@ -19,19 +21,14 @@ def sieveOfEratosthenes(x):
     return ar
 
 def isPrime(x, soe):
+    #O(1) prime checker
     prime = 1
     if soe[x] == 1:
         prime = 0
     return prime
 
-def getPrimeList(soe):
-    primelist = []
-    for i in range(0,x):
-        if soe[i] == 0:
-            primelist.append(i)
-    return primelist
-
 def getDoubleSquareList(x):
+    #gets the list of numbers under x that can be written as 2*k^2 
     ar = []
     dsq = 0
     fd = -2
@@ -43,16 +40,14 @@ def getDoubleSquareList(x):
         dsq += fd
     return ar
 
-def isTwiceSquare(x):
-    if x%2 == 1:
-        return 0
-    prec = .0000001
-    tes = math.sqrt(x/2)
-    if abs(test-int(tes)) < prec:
-        return 1
-    return 0
 
 def main():
+    #The Strategy: We assume that the number is under 1000000 (one million), otherwise we'd have to get a faster
+    #prime generator than the sieve. We test all odd composite numbers n from 9 (the first one) to 1,000,000.
+    #The test consists of taking a list of double-squares and checking if the difference betwen n and any of the 
+    #double squares is prime. if none of the double-squares work, n is the answer
+
+    #executes in about 0.90 secondss
     t0 = time()
     sieve = sieveOfEratosthenes(1000000)
     doubleSquareList = getDoubleSquareList(1000000)

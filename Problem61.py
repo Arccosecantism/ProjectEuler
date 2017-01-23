@@ -19,10 +19,10 @@ def isCombo(x, y):
     return (lastTwo == firstTwo)
 
 def getFigIndex(x,y):
-    if y < x:
-        return y
+    if x < y:
+        return x
     else:
-        return y+1
+        return x+1
 
 def getCombos(findex, figRest):
     combos = []
@@ -37,30 +37,63 @@ def getCombos(findex, figRest):
 
     return combos
 
-def searchFigurateNumbers(figs, figIndexes, listIndexes, searchStart):
+def searchFigurateNumbers(figIndexes, listIndexes, searchStart, getBack, osp):
 
     progress = []
     done = False
+    final = True
+    for i in listIndexes:
+        if i:
+            final = False
+
+    if final:
+        listIndexes[getBack] = 1
+
     startingPoint = figIndexes[searchStart[0]][searchStart[1]]
-    for i in range(0,len(startingPoint])):
+    #print(listIndexes)
+    for i in range(0,len(startingPoint)):
+        #print("here_A")
         ti = getFigIndex(i,searchStart[0])
         if listIndexes[ti] == 1:
-            listIndexes[ti] == 0
+           # print("here_B")
+            listIndexes[ti] = 0
             if startingPoint[i] != []:
-                for k in startingPoint[i]:
-                   nsearch = searchFigurateNumbers(figs, figIndexes, listIndexes,[ti,k])
-                   if nsearch != []:
-                       progress = nsearch
-                       done = True
-                       break
-                if done:
-                    break
+               # print("here_C")
+                if final:
+                    for k in range(0,len(startingPoint[i])):
+                        if osp[0] == ti and osp[1] == startingPoint[i][k]:
+                            #print("done")
+                            progress = [[startingPoint[i][k],ti]]
+                            done = True
+                            listIndexes[ti] = 0
+                            break
+                    if done:
+                        break
+                else:
+                    #print("here_D")
+                    for k in range(0,len(startingPoint[i])):
+                        
+                        nsearch = searchFigurateNumbers(figIndexes, listIndexes, [ti,startingPoint[i][k]], getBack, osp)
+                        if nsearch != []:
+                            #print(i,k, startingPoint)
+                            #print(startingPoint[i][k])
+                            progress = list([[startingPoint[i][k],ti]] + nsearch)
+                            done = True
+                            break
+            listIndexes[ti] = 1
+            if final:
+                listIndexes[ti] = 0
+        if done:
+            break
+            
     return progress
 
 
 
     
 def main():
+
+    t0 = time()
     figurateNumbers = []
     for i in range(3,9):
         figurateNumbers.append(getFigurateNumbersUnderFourDigit(i))
@@ -68,21 +101,30 @@ def main():
     for i in range(0,6):
         figCombos.append(getCombos(i,figurateNumbers))
     
-    listIndexes = [[i,1] for i in range(0,6)]
-    listIndexes[0] = [0,0]
+    listIndexes = [1]*6
+    listIndexes[0] = 0
 
     lindx = 0
     done = 0
 
-    print(listIndexes)
-   # for i in range(0,4):
-    #    for k in range(0,4-i)
-    for i in figCombos:
-        for k in i:
-            print(k)
-            print("^")
-        print("---")
-                
+
+    fcycle = []
+    for i in range(0, len(figCombos[0])):
+        ncycle = searchFigurateNumbers(figCombos, listIndexes, [0,i], 0, [0,i])
+        if ncycle != []:
+            fcycle = ncycle
+            break
+    
+    numCycle = []
+    for i in fcycle:
+        numCycle.append(figurateNumbers[i[1]][i[0]])
+
+    ssum = sum(numCycle)
+
+    
+    print(numCycle, fcycle)
+    print("Time Elapsed:", time()-t0)
+    print(ssum)    
 
 
     

@@ -9,7 +9,9 @@ def getCode():
     f = open("TextFiles\CipherProblem59.txt", 'r')
     lines = f.read()
     codeChars = lines.split(',')
-    codeVals = map(int,codeChars)
+    #print(codeChars)
+    codeVals = list(map(int,codeChars))
+    #print(codeVals)
     return codeVals
 
 def XOR(a,b):
@@ -44,11 +46,12 @@ def main():
     #Executes in 4.606 seconds
     t0 = time()
     codeVals = getCode()
+    #print(codeVals)
     av = ord('a')
     
     password = [av, av, av]
     done = 0
-    wordTests = ["the", "and", "this", "in"]
+    wordTests = ["the ", "and ", "of "]
     goodWord = ""
     while not(done):
         decryptAttempt = ""

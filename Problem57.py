@@ -9,33 +9,7 @@
 import math
 from time import time
 
-def gcf(x,y):
-    #Euclid's method for finding greatest common factor
-    a = max(x,y)
-    b = x+y-a
-    r = 2
-    while r:
-        r=a%b
-        a=b
-        b=r
-    return a
 
-def flipFraction(frac):
-    #flips a fraction: f(x) = 1/x
-    return [frac[1], frac[0]]
-
-def addIntegerToFraction(frac, xnt):
-    #Adds a whole number to a fraction
-    return [frac[0]+xnt*frac[1],frac[1]]
-
-def reduceFraction(fpair):
-    #reduces a fraction
-    fac = gcf(fpair[0],fpair[1])
-    return [int(fpair[0]/fac), int(fpair[1]/fac)]
-
-def testFractionLengths(frac):
-    #sees if a fraction has more digits in its numerator than its denominator
-    return len(str(frac[0])) > len(str(frac[1]))
 
 def nextExpansionMinusOne(frac):
     #Gets the next term in the sequence, but minus 1

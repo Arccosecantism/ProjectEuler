@@ -1,35 +1,13 @@
 import math
 from time import time
 
-def gcf(x,y):
-    #Euclid's method for finding greatest common factor
-    a = max(x,y)
-    b = x+y-a
-    r = 2
-    while r:
-        r=a%b
-        a=b
-        b=r
-    return a
 
-def flipFraction(frac):
-    #flips a fraction: f(x) = 1/x
-    return [frac[1], frac[0]]
-
-def addIntegerToFraction(frac, xnt):
-    #Adds a whole number to a fraction
-    return [frac[0]+xnt*frac[1],frac[1]]
-
-def reduceFraction(fpair):
-    #reduces a fraction
-    fac = gcf(fpair[0],fpair[1])
-    return [int(fpair[0]/fac), int(fpair[1]/fac)]
-
-def getNextFraction(frac, adder):
-    nfrac = reduceFraction(addIntegerToFraction(flipFraction(frac),adder))
-    return nfrac
-
-
+def isSquare(x):
+    prec = .000001
+    rtx = math.sqrt(x)
+    if abs(rtx-int(rtx)) < prec:
+        return True
+    return False
 def getContinuedFractionOfSqrt(x):
     sqx = math.sqrt(x)
     ipart = int(sqx)
@@ -56,17 +34,50 @@ def getContinuedFractionOfSqrt(x):
             cycle.append(intEl)
     return [ipart] + cycle
 
-def getNthConvergentSqrt(n, alist):
+def testPellSolution(x,d,y):
+    return x*x-d*y*y == 1
+
+def findPellSolution(n):
+    alist = getContinuedFractionOfSqrt(n)
+    convergents = []
     
-    sp = len(alist)-n
-    startFrac = [alist[-sp],1]
-    for i in range(sp+1,len(alist)+1):
-        startFrac = getNextFraction(startFrac, alist[-i])
-    return startFrac
+    pnum = alist[0]
+    num = alist[1]*alist[0]+1
+
+    pden = 1
+    den = alist[1]
+    
+    if testPellSolution(pnum, n, pden):
+        return [pnum,pden, n]
+    elif testPellSolution(num, n, den):
+        return [num,den, n]
+
+    ctr = 1
+    gs = len(alist)-1
+    sol = []
+    done = False
+    while not(done):
+        na = 1+ctr%gs
+        nnum = alist[na]*num+pnum
+        pnum = num
+        nden = alist[na]*den+pden
+        pden = den
+        den = nden
+        num = nnum
+        if testPellSolution(num,n,den):
+            done = True
+            sol = [num,den, n]
+        ctr += 1
+    return sol
  
 
 def main():
-    cl = getContinuedFractionOfSqrt(2)
-    print(cl, getNthConvergentSqrt(1, cl)) 
+    largest = [0,0]
+    for i in range(2,1001):
+        if not(isSquare(i)):
+            minx = findPellSolution(i)[0]
+            if minx > largest[1]:
+                largest = [i,minx]
+    print(largest[0])
 main()
 

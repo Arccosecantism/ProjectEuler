@@ -11,6 +11,7 @@ def sieveOfEratosthenes(x):
         ar.append(flick)
         flick = not(flick)
     ar[1] = True
+    ar[2] = False
     ub = int(math.ceil(math.sqrt(len(ar)))+1)
     for i in range(2,ub):
         if not(ar[i]):

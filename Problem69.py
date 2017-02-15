@@ -9,12 +9,12 @@ def primeFactorSieve(x):
     for i in range(-1,x):
         ar.append([])
     
-    ub = int(math.ceil(math.sqrt(len(ar)))+1)
+    ub = int(x/2)+1
     for i in range(2,ub):
         if ar[i] == []:
             for k in range(i,x,i):
                 ar[k].append(i)
-    for i in range(2,x):
+    for i in range(2,x+1):
         if ar[i] == []:
             ar[i] = [i]
     return ar

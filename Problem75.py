@@ -54,8 +54,8 @@ def generateSomeCoprimeNumbers(x, pfs, under):
 def main():
     sieve = primeFactorSieve(1000000)
     ptripSums = []
-    for i in range(1,1000):
-        cnums = generateSomeCoprimeNumbers(i,sieve,1000)
+    for i in range(1,870):
+        cnums = generateSomeCoprimeNumbers(i,sieve,870)
         for k in cnums:
             ptripSums.append(2*k*k+2*k*i)
 

@@ -1,21 +1,3 @@
-import math
-from time import time
-
-
-def getListSumOfDivisors(cap):
-    cap = max(2,cap)
-    sodList = [0]*cap
-    sodList[0] = 0
-    sodList[1] = 1
-    for i in range(2,cap):
-        ssum = 1+i
-        ub = int(i/2)+1
-        for k in range(2,ub):
-            if not(i&k):
-                ssum += k
-        sodList[i] = ssum
-    return sodList
-
 def getPentagonalNumbers(amt):
     stop = int(amt/2)+1
     if amt%2:
@@ -31,8 +13,6 @@ def getPentagonalNumbers(amt):
         #print(stop,num)    
     return pentagList
 
-
-
 def numberOfPartitions(num, partList, pentList):
     ssum = 0
     ctr = 0
@@ -47,13 +27,21 @@ def numberOfPartitions(num, partList, pentList):
     return ssum
 
 def main():
-    pentagonList = getPentagonalNumbers(1000)
+    pentagonList = getPentagonalNumbers(100000)
     #divList = getListSumOfDivisors(200)
+    print("done")
     partitionList = [1]
-    for i in range(1,101):
-        partitionList.append(numberOfPartitions(i,partitionList,pentagonList))
+    ctr = 1
+    val = 1
+    while val%1000000 != 0:
+        val = numberOfPartitions(ctr,partitionList,pentagonList)
+        #print(val)
+
+        partitionList.append(val)
+        ctr+=1
+        print(ctr)
     
-    print(partitionList[-1]-1)
+    print(ctr-1)
     
 
 main()

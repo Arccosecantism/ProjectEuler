@@ -47,16 +47,33 @@ def findNthCValue(n, pfs):
     divs = pfs[n]
     return sum(divs)
             
-
+def getBSequence(cseq):
+    bseq = [0,cseq[1]]
+    for i in range(2,len(cseq)):
+        ssum = 0
+        for k in range(1,i-1):
+            ssum+=cseq[k]*bseq[i-k]
+        bv = int(1.0/i*(cseq[i]+ssum))
+        bseq.append(bv)
+    return bseq
 def main():
-    sieve = sieveOfEratosthenes(100)
-    primeFactorList = primeFactorSieve(100)
-    aSequence = getSmallPrimeSieve(sieve,10)
+    sieve = sieveOfEratosthenes(10000)
+    primeFactorList = primeFactorSieve(10000)
+    aSequence = getSmallPrimeSieve(sieve,20)
     print(findNthCValue(6, primeFactorList))
     
     cSequence = []
-    for i in range(0,10):
+    for i in range(0,100):
         cSequence.append(findNthCValue(i,primeFactorList))
-    print(cSequence)
+    #print(cSequence)
+
+    bSequence = getBSequence(cSequence)
+
+    first_fk_val = -1
+    for i in range(0,len(bSequence)):
+        if bSequence[i] > 5000 and first_fk_val == -1:
+            first_fk_val = i
+            break
+    print(first_fk_val)
 main()
 

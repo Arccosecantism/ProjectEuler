@@ -68,7 +68,7 @@ def main():
 
     t0 = time()
     sieve = sieveOfEratosthenes(1000000)
-    print(time()-t0)
+    #print(time()-t0)
 
     cap = 100000
     plist = getPrimeList(sieve)
@@ -78,12 +78,14 @@ def main():
             break
         else:
             tplist.append(plist[i])
-
+    print(tplist)
     primeGroups = [ [ [3,0], [7,0] ], [ [[3,7],[0,1],0] ], [],[],[] ]
     for i in tplist:
+        print(i)
         pgl_1 = len(primeGroups) 
         pgl_2 = [len(primeGroups[g]) for g in range(0,pgl_1)]
         for k in range(0,pgl_1):
+            
             
             if k == 0:
                 #tp = time()

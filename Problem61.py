@@ -2,6 +2,7 @@ import math
 from time import time
 
 def getFigurateNumbersUnderFourDigit(fig):
+    #generates all 4-digit <fig>-sided figurate numbers(e.g., fig = 3 is triangular numbers, fig = 4 is squares, fig = 5 is pentagonal, etc.)
     figlist = []
     fd = 1
     sd = fig-2
@@ -14,17 +15,21 @@ def getFigurateNumbersUnderFourDigit(fig):
     return figlist
 
 def isCombo(x, y):
+    #Tells if the last two digits of x is the first two digits of y -- the numbers overlap by 2
     lastTwo = x%100
     firstTwo = int(y/100)
     return (lastTwo == firstTwo)
 
 def getFigIndex(x,y):
+    #does something weird that is specified for the recursive search
     if x < y:
         return x
     else:
         return x+1
 
 def getCombos(findex, figRest):
+    #searches a list of figurate numbers and, for each element, lists the indices of all the others it is a combonation with
+
     combos = []
     for i in range(0,len(figRest[findex])):
         combos.append([])
@@ -34,11 +39,11 @@ def getCombos(findex, figRest):
                 for k in range(0,len(figRest[j])):
                     if isCombo(figRest[findex][i],figRest[j][k]):
                         combos[-1][-1].append(k)
-
     return combos
 
 def searchFigurateNumbers(figIndexes, listIndexes, searchStart, getBack, osp):
-
+    #This is really confusing -- it does a depth first search through a sort of weird data structure that holds 
+    #all of the possible connections between figurate numbers. It runs untill it hits the 6-cycle
     progress = []
     done = False
     final = True
@@ -52,13 +57,10 @@ def searchFigurateNumbers(figIndexes, listIndexes, searchStart, getBack, osp):
     startingPoint = figIndexes[searchStart[0]][searchStart[1]]
     #print(listIndexes)
     for i in range(0,len(startingPoint)):
-        #print("here_A")
         ti = getFigIndex(i,searchStart[0])
         if listIndexes[ti] == 1:
-           # print("here_B")
             listIndexes[ti] = 0
             if startingPoint[i] != []:
-               # print("here_C")
                 if final:
                     for k in range(0,len(startingPoint[i])):
                         if osp[0] == ti and osp[1] == startingPoint[i][k]:
@@ -70,13 +72,10 @@ def searchFigurateNumbers(figIndexes, listIndexes, searchStart, getBack, osp):
                     if done:
                         break
                 else:
-                    #print("here_D")
                     for k in range(0,len(startingPoint[i])):
                         
                         nsearch = searchFigurateNumbers(figIndexes, listIndexes, [ti,startingPoint[i][k]], getBack, osp)
                         if nsearch != []:
-                            #print(i,k, startingPoint)
-                            #print(startingPoint[i][k])
                             progress = list([[startingPoint[i][k],ti]] + nsearch)
                             done = True
                             break
@@ -92,7 +91,8 @@ def searchFigurateNumbers(figIndexes, listIndexes, searchStart, getBack, osp):
 
     
 def main():
-
+    #The Strategy -- we pregenerate all the connections between 4-digit figurate numbers nad store them in a weird data structure. Then, we
+    #try to piece them together in order to find a 6-cycle. Executes in .250 seconds
     t0 = time()
     figurateNumbers = []
     for i in range(3,9):

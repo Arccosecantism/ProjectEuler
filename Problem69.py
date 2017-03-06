@@ -1,10 +1,12 @@
+#Problem: consider the totient function phi: N->N where phi(x) is the number of natural numbers under x that are relatively prime to x.
+#           for n<=1,000,000, which n produces the largest n/phi(n)?
+
 import math
 from time import time
 
 
 def primeFactorSieve(x):
-    #Produces a list of numbers under x, also tells if they are prime.
-    #this is to create an O(1) prime checker for primes under x 
+    #Produces a list of numbers under x and the unique primes in each of those number's prime factorization
     ar = []
     for i in range(-1,x):
         ar.append([])
@@ -23,6 +25,8 @@ def primeFactorSieve(x):
 
 
 def altTotient(x, pfs):
+    #finds x/totient(x) by being clever (aka, researching):
+    #totient of x can be found by multiplying all (1-1/j) where j is a prime dividing x and then by mulitplying by x
     primes = pfs[x]
     totala = 1
     totalb = 1
@@ -33,19 +37,18 @@ def altTotient(x, pfs):
     return (totalb*1.0)/totala
 
 def main():
-
+    #The strategy: now that we have a quick way to generate totients, the problem is easy: simply generate all
+    t0 = time()
     sieve = primeFactorSieve(1000002)
-    #print(sieve)
-    #print(plist, sieve)
     altTots = []
-    for i in range(1,1000000):
-        altTots.append([i,altTotient(i,sieve)])
     largest = 0
     largestVal = 0
-    for i in altTots:
-        if i[1] > largest:
-            largest = i[1]
-            largestVal = i[0]
+    for i in range(1,1000000):
+        atot = altTotient(i,sieve)
+        if atot > largest:
+            largest = atot
+            largestVal = i
+    print("Time Elapsed:", time()-t0)
     print(largest,largestVal)
 
 main()

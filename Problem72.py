@@ -2,8 +2,7 @@
 import math
 from time import time
 def primeFactorSieve(x):
-    #Produces a list of numbers under x, also tells if they are prime.
-    #this is to create an O(1) prime checker for primes under x 
+    #Produces a list of numbers under x and the unique primes in each of those number's prime factorization
     ar = []
     for i in range(-1,x):
         ar.append([])
@@ -18,19 +17,16 @@ def primeFactorSieve(x):
             ar[i] = [i]
     return ar
 
-
-
-
 def totient(x, pfs):
     primes = pfs[x]
     totala = 1
     totalb = 1
     for i in primes:
-        #print(1.0/i)
         
         totala *= (i-1)
         totalb *= i
     return totala*1.0*x/totalb
+
 def main():
 
     cap = 1000000

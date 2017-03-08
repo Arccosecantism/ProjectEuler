@@ -3,39 +3,22 @@
 import math
 from time import time
 
-def primeFactorSieve(x):
-    #Produces a list of numbers under x and the unique primes in each of those number's prime factorization
+def totientSieve(x):
+    #Produces a list of totient(n) for all n < x: uses a modified prime factor sieve
     ar = []
     for i in range(-1,x):
-        ar.append([])
+        ar.append(i+1)
     
     ub = int(x/2)+1
     for i in range(2,ub):
-        if ar[i] == []:
+        if ar[i] == i:
             for k in range(i,x,i):
-                ar[k].append(i)
-    for i in range(2,x+1):
-        if ar[i] == []:
-            ar[i] = [i]
+                ar[k]=int(ar[k]*(1-1.0/i))
+    for i in range(ub-1,x):
+        if ar[i] == i:
+            ar[i] -= 1
     return ar
 
-
-
-def getBetweenFractions(x, lb, ub, pfs):
-    #gets the fractions with denomitor x that are > 1/3 and < 1/2
-    pfacs = pfs[x]
-    tnums = [i for i in range(lb,ub)]
-    fnums = []
-    for i in tnums:
-        ctr = 0
-        done = 0
-        while not(done) and ctr<len(pfacs):
-            if not(i%pfacs[ctr]):
-                done = 1 
-            ctr+=1
-        if not(done):
-            fnums.append(i)
-    return fnums
 
 
 def main():
@@ -44,22 +27,16 @@ def main():
 
     #Executes in 28.4 seconds -- disappointing
     t0 = time()
-    cap = 12000
+    cap = 15
 
-    psieve = primeFactorSieve(cap+1)
+    tsieve = totientSieve(cap+1)
 
-    one_third = 1.0/3.0
-    one_half = .5
-
-    
-    ssum = 0
-    for i in range(5,cap+1):
-        lb = int(math.ceil(one_third*i))
-        ub = int(math.ceil(one_half*i))
-        bfs = getBetweenFractions(i,lb,ub,psieve)
-        #print(bfs)
-        ssum += len(bfs)
+    totsum = sum(tsieve[2:cap+1])
+    under_one_third = int(math.floor((totsum-2)*1.0/3))+1
+    over_one_half = int(math.ceil(totsum*1.0/2))
     print("Time Elapsed:", time()-t0)
-    print(ssum)
+    print(totsum-under_one_third-over_one_half)
+
+
 
 main()

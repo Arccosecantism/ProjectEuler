@@ -1,9 +1,10 @@
+#Problem: how many unique rationals p/q where p,q <= 12000; p,q are integers are there where 1/3<p/q<1/2
+
 import math
 from time import time
 
 def primeFactorSieve(x):
-    #Produces a list of numbers under x, also tells if they are prime.
-    #this is to create an O(1) prime checker for primes under x 
+    #Produces a list of numbers under x and the unique primes in each of those number's prime factorization
     ar = []
     for i in range(-1,x):
         ar.append([])
@@ -21,6 +22,7 @@ def primeFactorSieve(x):
 
 
 def getBetweenFractions(x, lb, ub, pfs):
+    #gets the fractions with denomitor x that are > 1/3 and < 1/2
     pfacs = pfs[x]
     tnums = [i for i in range(lb,ub)]
     fnums = []
@@ -37,7 +39,11 @@ def getBetweenFractions(x, lb, ub, pfs):
 
 
 def main():
+    #The Strategy: We simply check every denominator, and find all the numerators that create a irreducible rational between 1/3 and 1/2, and sum up
+    #the amounts
 
+    #Executes in 28.4 seconds -- disappointing
+    t0 = time()
     cap = 12000
 
     psieve = primeFactorSieve(cap+1)
@@ -53,6 +59,7 @@ def main():
         bfs = getBetweenFractions(i,lb,ub,psieve)
         #print(bfs)
         ssum += len(bfs)
+    print("Time Elapsed:", time()-t0)
     print(ssum)
 
 main()

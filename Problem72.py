@@ -3,7 +3,7 @@
 import math
 from time import time
 def totientSieve(x):
-    #Produces a list of totients(n) for all n < x: uses a modified prime factor sieve
+    #Produces a list of totient(n) for all n < x: uses a modified prime factor sieve
     ar = []
     for i in range(-1,x):
         ar.append(i+1)
@@ -18,18 +18,13 @@ def totientSieve(x):
             ar[i] -= 1
     return ar
 
-def totient(x, pfs):
-    #gives the number of natural numbers less than x that are relatively prime to x
-    totala = pfs[x][0]
-    totalb = pfs[x][1]
-    return totala*1.0*x/totalb
 
 def main():
     #The strategy: This is pretty obvious, especially since we covered totients earlier. A rational will be unique if it is irreducible. 
     #A rational is irreducible if the numerator and denominator are relatively prime. So the number of rationals between 0 and 1 with a given denominator d
     #is equal to the number of integers under d that are relatively prime to d, which is exactly the definithin of totient(d)=phi(d)
 
-    #So, we simply go from j=2 to 1000000, summing up totient(j)
+    #So, we simply generate phi(j) for 2<=j<=1000000 and sum them up
     #Executes in 7.131 seconds (I looked online, haven't seen much better times)
     t0 = time()
     cap = 1000000

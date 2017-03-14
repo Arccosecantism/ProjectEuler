@@ -1,19 +1,21 @@
+
+#The Problem: https://projecteuler.net/problem=74 -- how many starting numbers k < 1000000 are there such that
+#               the amount of calls of the fungtion S(x), where S(x) is the sum of the factorials of the 
+#               base-10 digits of x, until S(S(S(S...S(S(x))...))) starts repeating is 60
+
 import math
 from time import time
 
-
-
-
-import math
-from time import time
 
 def factorial(x):
+    #factorial function
     if x == 0 or x == 1:
         return 1
     else:
         return x*factorial(x-1)
 
 def getNumberOfOrders(digar):
+    #from a list of numbers, tells how many unique reorderings of the numbers there are
     zeros = 0
     for i in digar:
         if i == 0:
@@ -47,6 +49,8 @@ def getNumberOfOrders(digar):
 
 
 def getDigitFactorialSumTrue(x, facAr):
+
+    #gets the sum of the factorials of x's digits
     
     ssum = 0
     sx = str(x)
@@ -56,6 +60,7 @@ def getDigitFactorialSumTrue(x, facAr):
 
 
 def digitFamilyToNum(fam):
+    #gets a member of a "family" of numbers that contains all numbers that are just reorderings of digits 
  
     ssum = 0
     for k in range(0,len(fam)):
@@ -89,6 +94,8 @@ def generateSubsets(siz, numlist):
     return newlist
     
 def getDigitsStarsBars(stars):
+    #hard to explain -- gets all possible digit lists of a certain length that can be reordered to obtain
+    #all possible numbers that are <stars> long
     bars = 10
     proList = [0]*(stars+bars-1)
     nlist = [[i,1] for i in range(0,stars+bars-1)]
@@ -120,26 +127,16 @@ def getDigitsStarsBars(stars):
     return digitLists
 
 
-def main():
-    
-    
-    bigAr = []
-    for i in range(0,2200001):
-       # if not(i%100000):
-           
-        bigAr.append(getDigitFactorialSumTrue(i, facs))
-    print("Long_Array_Done")
 
-    for i in helpArray:
-        ctr = 1
-
-
-
-
-    
 
 def main():
-    print(getNumberOfOrders([9,1,2,3]))
+    #The strategy: We build a large list of numbers and what their factorial digit sums are so we can speed up the
+    #process of getting factorial digit sums. Then, starting with each possible set of digits, we simply check all
+    #of them to see if their cycle length is 60, and since every starting number must work, it is easy to determine 
+    #the amount of numbers that work, not only the amount of families
+
+    #Executes in 23.6 seconds
+    t0 = time()
     longest = 0
     longestVal = 0
 
@@ -159,17 +156,17 @@ def main():
 
     smallAr = []
     for i in range(0,2200001):
-        if not(i%10000):
-            print (i)
+        #if not(i%10000):
+           # print (i)
         smallAr.append(0)
-    print("Small_Array_Done")
+   # print("Small_Array_Done")
 
     bigAr = []
     for i in range(0,2200001):
        # if not(i%100000):
            
         bigAr.append(getDigitFactorialSumTrue(i, facs))
-    print("Long_Array_Done")
+    #print("Long_Array_Done")
 
 
     longVals = []
@@ -208,7 +205,7 @@ def main():
                         ctr += 1
     
             
-        print(helpArray[i])        
+       # print(helpArray[i])        
         if ctr == 61:
             longVals.append(helpArray[i])
         if not(i%10000):
@@ -216,6 +213,7 @@ def main():
     ssum = 0
     for i in longVals:
         ssum += getNumberOfOrders(i)
+    print("Time Elapsed:", time()-t0)
     print(longVals, ssum)
 
 

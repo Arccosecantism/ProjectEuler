@@ -39,33 +39,45 @@ def primeFactorSieve(x):
     return ar
 
 
-def getSmallPrimeSieve(soe, num):
-    return soe[0:num+1]
+
+
+#For the next functions, an explanation is in order: After doing some research, I found the best way
+#to solve this problem was by finding the Euler transform of a =[0,1,1,0,1,0,1,0,0,0,1,0,1...] where each prime 
+#numbered-spot = 1 and the rest are 0. You find the Euler transform by generating c, where the nth term of c is 
+#d*a[d] for all divisors d of n. Because a[d] = 0 for non-prime d and 1 for prime d, c[n] = sum(prime factors of c)
+#then, b, the Euler transform, is  b[n]=1/n*(c[n]+ {sum from k=1 to n-1 of}(c[k]b[n-k]) ) and b[1] = c[1]. 
+#Then b[n] is the number  of ways to write n as the sum of prime numbers, somehow. 
+#This is ridiculously non-intuitive, and I have no idea why it works
 
 def findNthCValue(n, pfs):
-
+    #finds the nth c value
     divs = pfs[n]
     return sum(divs)
             
 def getBSequence(cseq):
+    #generates the Euler transform of the sequence a, which is the b sequence
     bseq = [0,cseq[1]]
     for i in range(2,len(cseq)):
         ssum = 0
-        for k in range(1,i-1):
+        for k in range(1,i):
             ssum+=cseq[k]*bseq[i-k]
         bv = int(1.0/i*(cseq[i]+ssum))
         bseq.append(bv)
     return bseq
+
 def main():
+    #The strategy: we generate the c sequence up to 1000 (ends up being big enough), and then generate the b sequence.
+    # Then We simply find the first k such that bSequnce[k] > 5000 
+
+    #Executes in .251 seconds
+
+    t0 = time()
     sieve = sieveOfEratosthenes(10000)
     primeFactorList = primeFactorSieve(10000)
-    aSequence = getSmallPrimeSieve(sieve,20)
-    print(findNthCValue(6, primeFactorList))
     
     cSequence = []
-    for i in range(0,100):
+    for i in range(0,1000):
         cSequence.append(findNthCValue(i,primeFactorList))
-    #print(cSequence)
 
     bSequence = getBSequence(cSequence)
 
@@ -74,6 +86,7 @@ def main():
         if bSequence[i] > 5000 and first_fk_val == -1:
             first_fk_val = i
             break
+    print("Time Elapsed:", time()-t0)
     print(first_fk_val)
 main()
 

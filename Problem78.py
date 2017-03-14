@@ -1,3 +1,5 @@
+from time import time
+
 def getPentagonalNumbers(amt):
     stop = int(amt/2)+1
     if amt%2:
@@ -27,6 +29,8 @@ def numberOfPartitions(num, partList, pentList):
     return ssum
 
 def main():
+
+    t0 = time()
     pentagonList = getPentagonalNumbers(100000)
     #divList = getListSumOfDivisors(200)
     print("done")
@@ -41,6 +45,7 @@ def main():
         ctr+=1
         print(ctr)
     
+    print("Time Elapsed:", time()-t0)
     print(ctr-1)
     
 

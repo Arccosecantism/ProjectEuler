@@ -1,16 +1,17 @@
 
-
+#Problem: read https://projecteuler.net/problem=79 -- what is the smallest nubmer string that would conatin all the substrings
+#          in order, but with possible interruptions: "1569" would incude "159"
 from time import time
-
+import os
 
 def getLoginAttempts():
-    #reads a file and provides a list of ASCII values
+    #reads the file and gets the password attempts
     f = open("TextFiles\KeyLogsProblem79.txt", 'r')
     lines = [line[:3] for line in f]
-    print lines
     return lines
 
 def removeDuplicates(dlist):
+    #removes duplicates from a list
     clist = [dlist[0]]
     for i in range(1,len(dlist)):
         good = True
@@ -23,6 +24,9 @@ def removeDuplicates(dlist):
     return clist
 
 def generateSmallestStrings(bstr, sstr, psl):
+    #a horribly unreadable function -- it takes a large string and a small string. It then weaves them together in all possible ways.
+    #Then, for each of these possiblities, it 'reduces' them im some way -- accounting for number overlaps. THen it returns the
+    # subset of the weavings containing the strings with the smallest size
     if bstr == "":
         return [sstr]
     tcounter = 0
@@ -83,7 +87,7 @@ def generateSmallestStrings(bstr, sstr, psl):
             tctr += 1
         nsl[i] = cstr
 
-    minLen = 35
+    minLen = 35 #no string can be greater than 30 -- 012345678901234567890123456789 contains all 3-digit password attempts
     for i in nsl:
         tli = len(i)
         if tli < minLen:
@@ -96,6 +100,8 @@ def generateSmallestStrings(bstr, sstr, psl):
     
 
 def getSmallestPassword(guessList, psl):
+    #based on a list of password attempts, continualy calls generateSmallesStrings for each candidate string and always ges with th subset of the results
+    #that have the smallest lengths -- stores these as the new candidates
     possibleLists = [guessList[0]]
     for i in guessList:
         npl = []
@@ -103,7 +109,7 @@ def getSmallestPassword(guessList, psl):
             tl = generateSmallestStrings(j, i, psl)
             for k in tl:
                 npl.append(k)
-        print(npl)
+        #print(npl)
         minLen = 35
         for i in npl:
             tli = len(i)
@@ -118,6 +124,13 @@ def getSmallestPassword(guessList, psl):
                 
 
 def main():
+    #The Strategy: We use a possibly-greedy algorithm: start with the first password attempt as a candidate. Then, for each other password attempt, 
+    #for each candidate, find the smallest strings possible by combining the candidate with the password attempt in every possible way. Then, take
+    #the subset of all the results from this step and take the smalelst strings as the new candidates. I was worried this would explode in complexity,
+    #but it doesn't, probably because if one really short string appears as a result, it will be the sole candidate for the next round -- trimming the 
+    #tree of life.
+
+    #Executes in .110 seconds (pretty happy about this)
     t0 = time()
     possibleSpots = []
     for i in range(0,31):

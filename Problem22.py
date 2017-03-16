@@ -16,8 +16,8 @@ def removeNonAlphabetical(str):
 	
 def getNameArray():
 	#reads the files and provides the list of strings
-	print(os.getcwd())
-	f = open("TextFiles\NamesProblem22.txt", 'r')
+
+	f = open("TextFiles\\NamesProblem22.txt", 'r')
 	lines = f.read()
 	names = lines.split('\",\"')
 	for i in range(0, len(names)):

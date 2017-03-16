@@ -61,7 +61,7 @@ def main():
     #kth spot, where k is my current sum I am considering.
     #Then, I simply count up the number of spots that = 1
     # 
-    #Executes in  
+    #Executes in  4.43 seconds
 
     t0 = time()
     sieve = primeFactorSieve(1000000)

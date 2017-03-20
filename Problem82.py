@@ -31,29 +31,23 @@ def minList(numlist):
             minVal = i
     return minVal
 
+def testIndex(ni, numMatrix, blockMatrix):
+    if ni[0] >= len(numMatrix) or ni[0] < 0 or ni[1]>= len(numMatrix[ni[0]]) or ni[1] < 0:
+        return [ni, 0]
+    elif blockMatrix[ni[0]][ni[1]] == True:
+        return [ni, 1]
+    return [ni,2]
+        
 def getDownNode(i, k, matrix, blockMatrix):
     #gets the coordinates of the lower node
     #print(i+1,k)
     #for j in blockMatrix:
     #   print(j)
     #print(i+1, k, blockMatrix)
-    if i+1 >= len(matrix) or i < 0:
-        return [-1,-1]
-    elif k >= len(matrix[i]) or k < 0:
-        return [-1,-1]
-    elif blockMatrix[i+1][k] == True:
-        return [-1,-1]
-    
-    return [i+1, k] 
+    return testIndex([i+1,k],matrix, blockMatrix) 
 
 def getUpNode(i,k,matrix, blockMatrix):
-    if i-1 >= len(matrix) or i-1 < 0:
-        return [-1,-1]
-    elif k >= len(matrix[i]) or k < 0:
-        return [-1,-1]
-    elif blockMatrix[i-1][k] == True:
-        return [-1,-1]
-    return [i-1,k]
+    return testIndex([i-1,k],matrix, blockMatrix)
 
 def getRightNode(i, k, matrix, blockMatrix):
     #gets the coordinates of the right child (straight right)
@@ -61,13 +55,7 @@ def getRightNode(i, k, matrix, blockMatrix):
     #for j in blockMatrix:
     #   print(j)
     #print(i+1, k, blockMatrix)
-    if i >= len(matrix) or i < 0:
-        return [-1,-1]
-    elif k+1 >= len(matrix[i]) or k < 0:
-        return [-1,-1]
-    elif blockMatrix[i][k+1] == True:
-        return [-1,-1]
-    return [i, k+1] 
+    return testIndex([i,k+1],matrix, blockMatrix)
 
 def findLeastSum(i, k, numMatrix, sumMatrix, blockMatrix):
     #recursively finds the greatest sum: it looks at the sums in [i][k]'s two children 
@@ -77,21 +65,36 @@ def findLeastSum(i, k, numMatrix, sumMatrix, blockMatrix):
     if i >= 0 and i < len(numMatrix) and k >= 0 and k < len(numMatrix[i]):
         #print(i,k)
         blockMatrix[i][k] = True
-
+        for j in blockMatrix:
+            print(j)
+        print("")
+        for j in sumMatrix:
+            print(j)
+        print("--")
         if sumMatrix[i][k] == 0:
 
             if (k == len(numMatrix[-1])-1):
                 sumMatrix[i][k] = numMatrix[i][k]
 
             else:
+                dirNodes = []
+                testDirNodes = [[-1,-1],[-1,-1],[-1,-1]]
+                dlen = len(testDirNodes)
 
-                dirNodes = [[-1,-1],[-1,-1],[-1,-1]]
-                dlen = len(dirNodes)
+                testDirNodes[0] = getDownNode(i,k,numMatrix,blockMatrix)
+                testDirNodes[1] = getRightNode(i,k,numMatrix,blockMatrix)
+                testDirNodes[2] = getUpNode(i,k,numMatrix,blockMatrix)
 
-                dirNodes[0] = getDownNode(i,k,numMatrix,blockMatrix)
-                dirNodes[1] = getRightNode(i,k,numMatrix,blockMatrix)
-                
-                dirNodes[2] = getUpNode(i,k,numMatrix,blockMatrix)
+                for j in range(dlen):
+                    if testDirNodes[j][1] == 0:
+                        dirNodes.append([-1,-1])
+                    elif testDirNodes[j][1] == 1:
+                        dirNodes.append([-1,-1])
+                        #toUnblock.append(testDirNodes[j][0])
+                    elif testDirNodes[j][1] == 2:
+                        dirNodes.append(testDirNodes[j][0])
+
+
                 #if k == 0:
                 #    dirNodes[0] = [-1,-1]
                 #   dirNodes[2] = [-1,-1]
@@ -100,10 +103,12 @@ def findLeastSum(i, k, numMatrix, sumMatrix, blockMatrix):
                     if j != [-1,-1]:
                         findLeastSum(j[0],j[1],numMatrix,sumMatrix,blockMatrix)
                 
-                print("see",dirNodes[1])
+                #print("see",dirNodes[1])
 
                 for j in dirNodes:
-                    blockMatrix[j[0]][j[1]] = False
+                    if j != [-1,-1]:
+                        blockMatrix[j[0]][j[1]] = False
+
 
                 dirVals = [-1,-1,-1]
                 for j in range(0,dlen):

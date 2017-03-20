@@ -11,7 +11,7 @@ def getNumMatrix():
 
     #gets the list of numbers from "TriangleProblem67.txt"
     print(os.getcwd())
-    f = open("TextFiles\\MatrixThreeWayProblem82.txt", 'r')
+    f = open("TextFiles\\MatrixThreeWayProblem82Test2.txt", 'r')
     lines = f.readlines()
     flines = []
     for i in lines:
@@ -33,12 +33,17 @@ def minList(numlist):
 
 def getDownNode(i, k, matrix, blockMatrix):
     #gets the coordinates of the lower node
+    #print(i+1,k)
+    #for j in blockMatrix:
+    #   print(j)
+    #print(i+1, k, blockMatrix)
     if i+1 >= len(matrix) or i < 0:
         return [-1,-1]
     elif k >= len(matrix[i]) or k < 0:
         return [-1,-1]
     elif blockMatrix[i+1][k] == True:
         return [-1,-1]
+    
     return [i+1, k] 
 
 def getUpNode(i,k,matrix, blockMatrix):
@@ -52,6 +57,10 @@ def getUpNode(i,k,matrix, blockMatrix):
 
 def getRightNode(i, k, matrix, blockMatrix):
     #gets the coordinates of the right child (straight right)
+    #print(i,k+1)
+    #for j in blockMatrix:
+    #   print(j)
+    #print(i+1, k, blockMatrix)
     if i >= len(matrix) or i < 0:
         return [-1,-1]
     elif k+1 >= len(matrix[i]) or k < 0:
@@ -81,12 +90,17 @@ def findLeastSum(i, k, numMatrix, sumMatrix, blockMatrix):
 
                 dirNodes[0] = getDownNode(i,k,numMatrix,blockMatrix)
                 dirNodes[1] = getRightNode(i,k,numMatrix,blockMatrix)
+                
                 dirNodes[2] = getUpNode(i,k,numMatrix,blockMatrix)
-
+                #if k == 0:
+                #    dirNodes[0] = [-1,-1]
+                #   dirNodes[2] = [-1,-1]
+                print(i,k,dirNodes)
                 for j in dirNodes:
                     if j != [-1,-1]:
                         findLeastSum(j[0],j[1],numMatrix,sumMatrix,blockMatrix)
-
+                
+                print("see",dirNodes[1])
 
                 for j in dirNodes:
                     blockMatrix[j[0]][j[1]] = False
@@ -107,6 +121,7 @@ def findLeastSum(i, k, numMatrix, sumMatrix, blockMatrix):
                 if blocked:
                     sumMatrix[i][k] = -1
                 else:
+                    #print(i,k,mtl, dirNodes, dirVals)
                     minVal = minList(mtl)
                     sumMatrix[i][k] = numMatrix[i][k]+minVal
 
@@ -140,13 +155,19 @@ def main():
         nft = pathMatrix[i][0]
         if nft < smallestSum:
             smallestSum = nft
+        for a in range(len(backtrackMatrix)):
+            for b in range(len(backtrackMatrix[a])):
+                backtrackMatrix[a][b] = False
     print("Time Elapsed:", time()-t0)
-    '''for i in numberMatrix:
+    for i in numberMatrix:
         print(i)
+    print("")
     for i in pathMatrix:
         print(i)
+    print("")
     for i in backtrackMatrix:
-        print(i)'''
+        print(i)
+    print("")
     print(smallestSum)
 	
 main()

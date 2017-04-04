@@ -57,8 +57,10 @@ def getRightNode(i, k, matrix, blockMatrix):
     #print(i+1, k, blockMatrix)
     return testIndex([i,k+1],matrix, blockMatrix)
 
+def getLeftNode(i, k, matrix, blockMatrix):
+    return testIndex([i,k-1],matrix,blockMatrix)
 
-def findLeastSumBlocked(i, k, numMatrix, bsumMatrix, blockMatrix):
+def findLeastSumBlocked(i, k, numMatrix, bsumMatrix, blockMatrix, msum, csum):
     #recursively finds the greatest sum: it looks at the sums in [i][k]'s two children 
     #and picks the bigger one and adds its value to it to figure out its own max sum
     #If the children don't know their sum, recurse once on each child.
@@ -66,12 +68,14 @@ def findLeastSumBlocked(i, k, numMatrix, bsumMatrix, blockMatrix):
     if i >= 0 and i < len(numMatrix) and k >= 0 and k < len(numMatrix[i]):
         #print(i,k)
         blockMatrix[i][k] = True
+        csum += numMatrix[i,k]
         #for j in blockMatrix:
         #    print(j)
         #print("")
         #for j in bsumMatrix:
         #   print(j)
         #print("--")
+        
         if bsumMatrix[i][k] == 0:
 
             if (k == len(numMatrix[-1])-1):
@@ -79,12 +83,13 @@ def findLeastSumBlocked(i, k, numMatrix, bsumMatrix, blockMatrix):
 
             else:
                 dirNodes = []
-                testDirNodes = [[-1,-1],[-1,-1],[-1,-1]]
+                testDirNodes = [[-1,-1],[-1,-1],[-1,-1],[-1,-1]]
                 dlen = len(testDirNodes)
 
-                testDirNodes[0] = getDownNode(i,k,numMatrix,blockMatrix)
-                testDirNodes[1] = getRightNode(i,k,numMatrix,blockMatrix)
-                testDirNodes[2] = getUpNode(i,k,numMatrix,blockMatrix)
+                testDirNodes[0] = getDownNode(i,k,numMatrix,blockMatrix,msum,csum)
+                testDirNodes[1] = getRightNode(i,k,numMatrix,blockMatrix,msum,csum)
+                testDirNodes[2] = getUpNode(i,k,numMatrix,blockMatrix,msum,csum)
+                testDirNodes[3] = getDownNode(i,k,numMatrix,blockMatrix,msum,csum)
 
                 for j in range(dlen):
                     if testDirNodes[j][1] == 0:

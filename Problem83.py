@@ -20,42 +20,25 @@ def getNumMatrix():
         else:
             flines.append(i)
     nlines = [[int(i) for i in k.split(",")] for k in flines]
-    #for i in nlines:
-    #	print(i)
     return nlines
-	
-def minu(a,b):
-    if a < 0 and b < 0:
-        if a > b:
-            return a
-        else:
-            return b
-    elif a < 0:
-        return b
-    elif b < 0:
-        return a
-    else:
-        if a > b:
-            return b
-        else:
-            return a
 
-def testIndex(ni, numMatrix,):
+def testIndex(ni, numMatrix):
+    #tests if an index is 
     if ni[0] >= len(numMatrix) or ni[0] < 0 or ni[1]>= len(numMatrix[ni[0]]) or ni[1] < 0:
-        return [-1,-1]
+        return (-1,-1)
     return ni
         
 def getDownNode(i, k, matrix):
-    return testIndex([i+1,k],matrix) 
+    return testIndex((i+1,k),matrix) 
 
 def getUpNode(i,k,matrix):
-    return testIndex([i-1,k],matrix)
+    return testIndex((i-1,k),matrix)
 
 def getRightNode(i, k, matrix):
-    return testIndex([i,k+1],matrix)
+    return testIndex((i,k+1),matrix)
 
 def getLeftNode(i, k, matrix):
-    return testIndex([i,k-1],matrix)
+    return testIndex((i,k-1),matrix)
 
 def fixNodeNeighbors(i,k,markers,nm,csm):
     dnodes = []
@@ -64,15 +47,10 @@ def fixNodeNeighbors(i,k,markers,nm,csm):
     dnodes.append(getLeftNode(i,k,nm))
     dnodes.append(getUpNode(i,k,nm))
     for node in dnodes:
-        if node != [-1,-1]:
+        if node != (-1,-1):
             if csm[node[0]][node[1]] > csm[i][k] + nm[node[0]][node[1]]:
                 csm[node[0]][node[1]] = csm[i][k] + nm[node[0]][node[1]]
                 markers.add((node[0],node[1]))
-    #markers.discard((i,k))
-
-
-
-
     
 def initializeCumulativeSumMatrix(nm, csm):
     csm[0][0] = nm[0][0]
@@ -82,7 +60,7 @@ def initializeCumulativeSumMatrix(nm, csm):
         csm[0][k] = csm[0][k-1]+nm[0][k]
     for i in range(1,len(csm)):
         for k in range(1,len(csm)):
-            csm[i][k] = minu(csm[i][k-1], csm[i-1][k]) + nm[i][k]
+            csm[i][k] = min(csm[i][k-1], csm[i-1][k]) + nm[i][k]
 def main():
     t0 = time()
     numberMatrix = getNumMatrix()

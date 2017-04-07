@@ -15,6 +15,7 @@ def matrixMultiply(ma, mb):
     return pm
 
 def randomCards(prob, cardSquare, probRow):
+    
     one_sixteenth = 1.0/16
     probRow[0] += prob*one_sixteenth
     probRow[10] += prob*one_sixteenth
@@ -73,7 +74,7 @@ def deepCopyMatrix(ma, mb):
     return ma
     
 def main():
-    sideNum = 4 
+    sideNum = 3
     monopolyMatrix = []
     #print(generateSquareMarkovRow(0,6))
     for i in range(0,40):
@@ -84,7 +85,7 @@ def main():
     resMat = deepCopyMatrix(resMat, monopolyMatrix)
     #print(resMat)
     for i in range(0,limAmt):
-        resMat = deepCopyMatrix(resMat, matrixMultiply(resMat,monopolyMatrix))
+        resMat = matrixMultiply(resMat,monopolyMatrix)
 
     alik = 0
     asq = -1

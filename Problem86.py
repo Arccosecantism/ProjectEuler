@@ -38,26 +38,56 @@ def generateCoprimeNumbers(x, pfs):
     return goodList
 
 def generatePythagTriples(cap):
-    psieve = primeFactorSieve(1000000)
+    psieve = primeFactorSieve(cap+10)
     mctr = 1
-    ptlist = []
-    while 2*mctr<cap:
+    pthist = []
+    for i in range(cap+1):
+        pthist.append([])
+
+    while 2*mctr<=cap:
 
         partners = generateCoprimeNumbers(mctr,psieve)
-        print(partners)
+       # print(partners)
         for k in partners:
             av = mctr*mctr-k*k
             bv = 2*k*mctr
+            smaller = min(av,bv)
+            larger = max(av,bv)
             mult = 1
-            while bv*mult < cap:
-                if av*mult < 2*cap: 
-                    ptlist.append((av*mult,bv*mult,))
+            while smaller*mult <= cap: 
+                if larger*mult <= 2*cap:
+                    pthist[smaller*mult].append(larger*mult)
                 mult += 1
         mctr += 1
-    return ptlist
+    return pthist
     
-def main():
-    
-    print(generatePythagTriples(100))
+def countPrismsForCap(pythagHist, maxcap):
 
+    ssum = 0
+    for i in range(0,min(len(pythagHist),maxcap)):
+        for k in pythagHist[i]:
+            ssum += max(int(k/2) - (k-i-1),0)
+            if k <= maxcap:
+                ssum += int(i/2)
+    
+    return ssum
+
+def binarySearchCuboidAmounts(cmin, cmax, goal, pythagHist):
+    guess = int((cmin+cmax)/2)
+    if guess == cmax or guess == cmin:
+        return guess
+    gc = countPrismsForCap(pythagHist, guess)
+    #print(gc)
+    if gc<goal:
+        return binarySearchCuboidAmounts(guess,cmax,goal,pythagHist)
+    elif gc>goal:
+        return binarySearchCuboidAmounts(cmin,guess,goal,pythagHist)
+
+def main():
+    trueMax = 3000
+    trueMin = 1000
+    goal = 1000000
+    pythagHist = generatePythagTriples(trueMax+10)
+    threshold = binarySearchCuboidAmounts(trueMin, trueMax, goal, pythagHist)
+    print(threshold)
 main()

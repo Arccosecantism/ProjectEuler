@@ -1,6 +1,6 @@
 
 #The Problem: https://projecteuler.net/problem=74 -- how many starting numbers k < 1000000 are there such that
-#               the amount of calls of the fungtion S(x), where S(x) is the sum of the factorials of the 
+#               the amount of calls of the function S(x), where S(x) is the sum of the factorials of the 
 #               base-10 digits of x, until S(S(S(S...S(S(x))...))) starts repeating is 60
 
 import math

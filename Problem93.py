@@ -36,7 +36,7 @@ def multiplyf(a,b):
 def dividef(a,b):
     if b == 0:
         return 9.183602
-    return a/b
+    return a*1.0/b
 def evaluate(func,a,b):
     return func(a,b)
 
@@ -68,7 +68,7 @@ def generatePossibleNumbersChain(valList,opPrecs,opList,opMap):
                     del tval[nk]
                     tval.insert(nk,ktv)
                 
-                if tval[0] == int(tval[0]):
+                if abs(int(tval[0])-tval[0]) < .01:
                     if tval[0] >= 1:
                         possibleNumsSet.add(tval[0])
 
@@ -95,8 +95,8 @@ def main():
     funcList = [addf,subtractf,multiplyf,dividef]
     operationList = generateOperationList()
     operationPrecedences = [(0,1,2),(0,2,1),(1,0,2),(1,2,0),(2,0,1),(2,1,0)]
-    print(generatePossibleNumbersChain([1,2,5,8],operationPrecedences,operationList,funcList))
-    '''bestChain = 0
+    #print(generatePossibleNumbersChain([5,6,8,9],operationPrecedences,operationList,funcList))
+    bestChain = 0
     bestTuple = (-1,-1,-1,-1)
     for a in range(0,7):
         for b in range(a+1,8):
@@ -107,5 +107,5 @@ def main():
                         bestChain = tchain
                         bestTuple = (a,b,c,d)
                         print(bestTuple, bestChain)
-    print(bestTuple, bestChain)'''
+    print(bestTuple, bestChain)
 main()

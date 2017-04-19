@@ -12,7 +12,19 @@ def getPuzzles():
         if i != "":
             pregridsc.append(i.replace("\n", ""))
         
-    print(pregridsc)
+    puzzles = []
+    for i in pregridsc:
+        grid = []
+        for j in range(0,9):
+            grid.append([])
+            for k in range(0,9):
+                val = set([int(i[j*9+k])])
+                if val == set([0]):
+                    val = set([])
+                grid[j].append(val)
+        puzzles.append(grid)
+    return puzzles
+    
 def getNumberConstraints(square, sudokuSquare):
     #basic numbers
     if len(sudokuSquare[square[0]][square[1]]) >= 1:
@@ -43,7 +55,11 @@ def getSmallNumbers(sudokuSquare):
     #for i in range(len(sudokuSquare)):
        # for j in range(len(sudokuSquare)):
 def main():
-    getPuzzles()
+    puzzles = getPuzzles()
+    for i in puzzles:
+        for j in i:
+            print(j)
+        print("---")
     print(getAllConstraintIndeces((0,0)))
 
 main()

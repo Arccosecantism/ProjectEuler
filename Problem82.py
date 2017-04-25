@@ -1,15 +1,11 @@
-#Problem: 	Find the "path" (moving only down or down-right) in the trignle in "TriangleProblem67.txt" 
-#			that has the maximum sum compared to all other paths. What is this sum? (It might help to look at https://projecteuler.net/problem=18)
-#		
-#			This problem is almopst exactly the same as problem 18, except the triangle I have to search is much bigger, so I can't check every path -- I 
-#			need a better algorithm
+#Problem: 	It's the exact same problem as problem 81, but this time, you can also move up in the martrix
 import math
 import os
 from time import time
 
 def getNumMatrix():
 
-    #gets the list of numbers from "TriangleProblem67.txt"
+    #gets the list of numbers from "MatrixThreeWayProblem82.txt"
     print(os.getcwd())
     f = open("TextFiles\\MatrixThreeWayProblem82.txt", 'r')
     lines = f.readlines()
@@ -25,6 +21,7 @@ def getNumMatrix():
     return nlines
 	
 def minList(numlist):
+    #finds the minimum value of an int list
     minVal = numlist[0]
     for i in numlist:
         if i < minVal:
@@ -32,6 +29,7 @@ def minList(numlist):
     return minVal
 
 def testIndex(ni, numMatrix, blockMatrix):
+    #tests if an index is in bounds or blocked (a product of recursion)
     if ni[0] >= len(numMatrix) or ni[0] < 0 or ni[1]>= len(numMatrix[ni[0]]) or ni[1] < 0:
         return [ni, 0]
     elif blockMatrix[ni[0]][ni[1]] == True:
@@ -40,29 +38,24 @@ def testIndex(ni, numMatrix, blockMatrix):
         
 def getDownNode(i, k, matrix, blockMatrix):
     #gets the coordinates of the lower node
-    #print(i+1,k)
-    #for j in blockMatrix:
-    #   print(j)
-    #print(i+1, k, blockMatrix)
+
     return testIndex([i+1,k],matrix, blockMatrix) 
 
 def getUpNode(i,k,matrix, blockMatrix):
+    #gets the upper node
     return testIndex([i-1,k],matrix, blockMatrix)
 
 def getRightNode(i, k, matrix, blockMatrix):
-    #gets the coordinates of the right child (straight right)
-    #print(i,k+1)
-    #for j in blockMatrix:
-    #   print(j)
-    #print(i+1, k, blockMatrix)
+    #gets the coordinates of the right node
+
     return testIndex([i,k+1],matrix, blockMatrix)
 
 
 def findLeastSumBlocked(i, k, numMatrix, bsumMatrix, blockMatrix):
-    #recursively finds the greatest sum: it looks at the sums in [i][k]'s two children 
+    #recursively finds the greatest sum: it looks at the sums in [i][k]'s three children 
     #and picks the bigger one and adds its value to it to figure out its own max sum
-    #If the children don't know their sum, recurse once on each child.
-    #So it's not total brute-force: it remembers values that it has already calculated
+    #If the children don't know their sum, recurse once on each child, but disallowing that recursive process
+    #to ever check [i][k]'s node again -- (i,k) is blocked
     if i >= 0 and i < len(numMatrix) and k >= 0 and k < len(numMatrix[i]):
         #print(i,k)
         blockMatrix[i][k] = True
@@ -136,6 +129,7 @@ def findLeastSumBlocked(i, k, numMatrix, bsumMatrix, blockMatrix):
         #print((i >= 0 and i < len(numMatrix) and k >= 0 and k < len(numMatrix[i])))
 
 def resetBlockedSumMatrixCollumn(bsm, tsm, bkm, col, head):
+    #resets the blocked-sum matrix
     for i in range(head,len(tsm)):
         bsm[i][col] = tsm[i][col]
         bkm[i][col] = False
@@ -147,9 +141,10 @@ def resetBlockedSumMatrixCollumn(bsm, tsm, bkm, col, head):
 
 
 def main():
-	#see findGreatestSum for algorithm -- main simply calls it and prints the answer. THe way I solved the problem the first time
-	#worked for this problem, because I used some caching -- the program remembered previously calculated sums
-	#Executes in .09 seconds
+	#see findSmallest sum fort recursive algorithm. This problem is almost the same as 81, but you have to keep calculating 
+    #temporary minimum path sums, because the path susms found are only true in the context of the blocked values. So we start at the right
+    #and move leftwards, resetting the blocked path matrix
+    #resetting an 80x80 matrix takes time, and the execution speed is 11.28 seconds
     t0 = time()
     numberMatrix = getNumMatrix()
     pathMatrix = []

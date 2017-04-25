@@ -1,15 +1,11 @@
-#Problem: 	Find the "path" (moving only down or down-right) in the trignle in "TriangleProblem67.txt" 
-#			that has the maximum sum compared to all other paths. What is this sum? (It might help to look at https://projecteuler.net/problem=18)
-#		
-#			This problem is almopst exactly the same as problem 18, except the triangle I have to search is much bigger, so I can't check every path -- I 
-#			need a better algorithm
+#Problem: 	Same problem as 82, but you can move in all directions
 import math
 import os
 from time import time
 
 def getNumMatrix():
 
-    #gets the list of numbers from "TriangleProblem67.txt"
+    #gets the list of numbers from "MatrixFourWayProblem83.txt
     print(os.getcwd())
     f = open("TextFiles\\MatrixFourWayProblem83.txt", 'r')
     lines = f.readlines()
@@ -25,7 +21,7 @@ def getNumMatrix():
     return nlines
 
 def testIndex(ni, numMatrix):
-    #tests if an index is 
+    #tests if an index is in bounds
     if ni[0] >= len(numMatrix) or ni[0] < 0 or ni[1]>= len(numMatrix[ni[0]]) or ni[1] < 0:
         return (-1,-1)
     return ni
@@ -43,6 +39,8 @@ def getLeftNode(i, k, matrix):
     return testIndex((i,k-1),matrix)
 
 def fixNodeNeighbors(i,k,markers,nm,csm):
+    #compares a node to its neighbors. If one of it's neighbors cumulative sum values + its actual value is smaller than
+    #its current cumulative sum, change the csum accordingly, and mark all the neighbor nodes to be checked later
     dnodes = []
     dnodes.append(getRightNode(i,k,nm))
     dnodes.append(getDownNode(i,k,nm))
@@ -55,6 +53,8 @@ def fixNodeNeighbors(i,k,markers,nm,csm):
                 markers.add((node[0],node[1]))
     
 def initializeCumulativeSumMatrix(nm, csm):
+    #this goes through from top left to bottom right, in a diagonal manner, picking a good starting guess
+    #for the cumulative sums; it's simply based on the top and left node; whichever is smaller
     csm[0][0] = nm[0][0]
     for i in range(1,len(csm)):
         csm[i][0] = csm[i-1][0]+nm[i][0]
@@ -64,6 +64,11 @@ def initializeCumulativeSumMatrix(nm, csm):
         for k in range(1,len(csm)):
             csm[i][k] = min(csm[i][k-1], csm[i-1][k]) + nm[i][k]
 def main():
+    #The Strategy: This problem can't be solved in the same way as 82 easily. Instead, we consider running cumulative sums.
+    #We first generate a matrix with good guesses at the cumulative sums. Then, we fix the cumulative sums, considering all the surrounding cumulative sums.
+    #Then we check all the neighbors, as their cumulative sum maybe could be better. We do this until there are no more squares to check. It's sort
+    #of a process by decent -- each "fix" reduces the matrix to a more correctly ordered state.
+    #Executes in .868 seconds
     t0 = time()
     numberMatrix = getNumMatrix()
     cSumMatrix = []

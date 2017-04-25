@@ -1,3 +1,5 @@
+#Problem: -- see https://projecteuler.net/problem=86 -- this one is confusing
+
 import math
 from time import time
 
@@ -38,6 +40,7 @@ def generateCoprimeNumbers(x, pfs):
     return goodList
 
 def generatePythagTriples(cap):
+    #generates pythagorean triples 
     psieve = primeFactorSieve(cap+10)
     mctr = 1
     pthist = []

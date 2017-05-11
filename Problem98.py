@@ -1,8 +1,9 @@
 
-import copy
+#Problem:  https://projecteuler.net/problem=98
 import math
 
 def getWords():
+    #gets toe words from a text file
     f = open("TextFiles\\WordListProblem98.txt", 'r')
     lines = f.read()
     words = lines.split("\",\"")
@@ -11,6 +12,8 @@ def getWords():
     return words
 
 def mergeList(alist, blist, compFunc):
+    #merges two lists -- part of merge sort.
+    #compares using an arbitrary compare function
     actr = 0
     bctr = 0
     nlist = []
@@ -36,6 +39,7 @@ def mergeList(alist, blist, compFunc):
     return nlist
 
 def mergeSort(alist, compFunc):
+    #A general merge sort 
     if len(alist) > 1:
         hp = len(alist)//2
         leftList = alist[:hp]
@@ -47,11 +51,14 @@ def mergeSort(alist, compFunc):
         return alist
 
 def compareFunction(a,b):
+    #greater than compare function
     if a > b:
         return False
     return True
 
 def getAlphaValue(cx):
+    #gets alphabetical value of a character: 'a'->0, 'b'->1
+    #'A' -> 0, 'Z' -> 25, numbers are "greater" than letters 
     if cx >= 'a' and cx <= 'z':
         return ord(cx)-ord('a')
     elif cx >= 'A' and cx <= 'Z':

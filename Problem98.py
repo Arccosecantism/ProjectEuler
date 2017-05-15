@@ -180,6 +180,7 @@ def generateSquares(maxLength):
 
 
 def testReducedAnagram(ang, squarestr):
+    #tests if a square, after undergoig a character transformation that would result in an anagram if applied to another word, is still a square 
     if len(ang[0]) != len(squarestr):
         return False
     numAsg = []
@@ -212,6 +213,7 @@ def testReducedAnagram(ang, squarestr):
     
 def main():
     #print(generateSquares(5))
+    print("Hi")
     reducedAnagrams = getReducedAnagrams(getWordAnagrams(getWords()))
     maxLength = 0
     for i in reducedAnagrams:

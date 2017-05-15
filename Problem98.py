@@ -69,7 +69,8 @@ def getAlphaValue(cx):
          return ord(cx)+36
 
 def checkFirstAlphabetically(strx, stry):
-    #print(strx, stry)
+    #checks if a string is previous alphabetically to another string -- 
+    #if two identical strings are input, it will treat it as "not previous"
     if stry == "":
         return False
     elif strx == "":
@@ -85,17 +86,21 @@ def checkFirstAlphabetically(strx, stry):
         return checkFirstAlphabetically(strx[1:], stry[1:])
 
 def checkOrderedAlpha(strx,stry):
+    #returns 
     sx = ''.join(mergeSort(strx, checkFirstAlphabetically))
     sy = ''.join(mergeSort(stry,checkFirstAlphabetically))
     return checkFirstAlphabetically(sx,sy)
 
 def specialAlphaCompare(valx, valy):
     return checkFirstAlphabetically(valx[1], valy[1])
+
 def getOrderedStr(strx):
+    #returns a string, sorted alphabetically by letter
     return ''.join(mergeSort(strx, checkFirstAlphabetically))
 
 
 def getReducedAnagrams(alist):
+    #from a list of anagrams, gets all position transformations -- generalizes the concept of an anagram
     reducedAnagramList = []
     for i in alist:
         for par in range(2):
@@ -127,6 +132,7 @@ def getReducedAnagrams(alist):
 
 
 def getWordAnagrams(wordList):
+    #from a word list, gets all anagrams
     maxWordLength = 0
     for i in wordList:
         if len(i) > maxWordLength:
@@ -156,6 +162,7 @@ def getWordAnagrams(wordList):
 
 
 def generateSquares(maxLength):
+    #generates a list of squares, separated by digit-amount, up to a maximum length
     lenctr = 0
     squareLists = [[]]
     for i in range(maxLength):
@@ -204,7 +211,7 @@ def testReducedAnagram(ang, squarestr):
     return False 
     
 def main():
-    
+    #print(generateSquares(5))
     reducedAnagrams = getReducedAnagrams(getWordAnagrams(getWords()))
     maxLength = 0
     for i in reducedAnagrams:

@@ -1,6 +1,7 @@
 
 #Problem:  https://projecteuler.net/problem=98
 import math
+from time import time
 
 def getWords():
     #gets toe words from a text file
@@ -86,12 +87,13 @@ def checkFirstAlphabetically(strx, stry):
         return checkFirstAlphabetically(strx[1:], stry[1:])
 
 def checkOrderedAlpha(strx,stry):
-    #returns 
+    #checks for two strings, when completely orderered alphabetically, which one is first alphabetically 
     sx = ''.join(mergeSort(strx, checkFirstAlphabetically))
     sy = ''.join(mergeSort(stry,checkFirstAlphabetically))
     return checkFirstAlphabetically(sx,sy)
 
 def specialAlphaCompare(valx, valy):
+    #cpompares a string based on the alphabetic predcedence of the seconds char
     return checkFirstAlphabetically(valx[1], valy[1])
 
 def getOrderedStr(strx):
@@ -212,8 +214,10 @@ def testReducedAnagram(ang, squarestr):
     return False 
     
 def main():
-    #print(generateSquares(5))
-    print("Hi")
+    #The strategy: we get all the words, find all the anagram pairs, reduce the lsit to the actual transfrmations from one anagram to the next, and 
+    #see if those transformations also apply to square numbers, transforming them into other squares. Keep track of the largest square
+    #Executes in 3.156 seconds
+    t0 = time()
     reducedAnagrams = getReducedAnagrams(getWordAnagrams(getWords()))
     maxLength = 0
     for i in reducedAnagrams:
@@ -232,16 +236,9 @@ def main():
                 if testResult:
                     print(i, ix, math.sqrt(ix))
                     maxNum = ix
-
+    print("Time Elapsed:  " + str(time()-t0))
     print(maxNum)
-            
-    
 
-
-    '''tlist = [3,6,4,7,4,8,2,6,4,4,5,7,0,1,2]
-    mlist = [1,2,3]
-    nlist = [2,4,5]
-    #print(mergeSort(["bapple", "apple", "bap", "app", "burple", "2apple", "--apple", "2burple"] , checkFirstAlphabetically))'''
    
 main()
 

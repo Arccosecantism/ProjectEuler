@@ -1,3 +1,5 @@
+#Problem: -- see https://projecteuler.net/problem=86 -- this one is confusing
+
 import math
 from time import time
 
@@ -38,6 +40,7 @@ def generateCoprimeNumbers(x, pfs):
     return goodList
 
 def generatePythagTriples(cap):
+    #generates pythagorean triples under a cap
     psieve = primeFactorSieve(cap+10)
     mctr = 1
     pthist = []
@@ -62,7 +65,7 @@ def generatePythagTriples(cap):
     return pthist
     
 def countPrismsForCap(pythagHist, maxcap):
-
+    #this counts the number of prisms that have the special property under a maxcap of side length
     ssum = 0
     for i in range(0,min(len(pythagHist),maxcap)):
         for k in pythagHist[i]:
@@ -73,6 +76,7 @@ def countPrismsForCap(pythagHist, maxcap):
     return ssum
 
 def binarySearchCuboidAmounts(cmin, cmax, goal, pythagHist):
+    #does a binary search on side length in order to fit a goal of a certain number of cuboids
     guess = int((cmin+cmax)/2)
     if guess == cmax or guess == cmin:
         return guess
@@ -84,10 +88,15 @@ def binarySearchCuboidAmounts(cmin, cmax, goal, pythagHist):
         return binarySearchCuboidAmounts(cmin,guess,goal,pythagHist)
 
 def main():
+    #The Strategy: After we have the function which checks how many cuboids wlil be possible under a givne max length, we simply
+    #do a binary search on side length to get to a goal result of 1000000 cuboids
+    #Executes in 3.514 seconds
+    t0 = time()
     trueMax = 3000
     trueMin = 1000
     goal = 1000000
     pythagHist = generatePythagTriples(trueMax+10)
     threshold = binarySearchCuboidAmounts(trueMin, trueMax, goal, pythagHist)
+    print("Time Elapsed:  " + str(time()-t0))
     print(threshold)
 main()

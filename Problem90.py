@@ -1,3 +1,5 @@
+#Problem: https://projecteuler.net/problem=90 -- a werid question about which dice could generate all the square numbers
+
 import math
 from time import time
 
@@ -35,9 +37,11 @@ def generateCleanSubsets(siz, numlist):
     return badSets
 
 def generateDiceArrangements():
+    #gets the possible dice arrangements
     return generateCleanSubsets(6,[0,1,2,3,4,5,6,7,8,9])
 
 def testTwoDice(da, db):
+    #tests if two dice can generate all square numbers using their digits
     squares = [(0,1),(0,4),(0,9),(1,6),(2,5),(3,6),(4,9),(6,4),(8,1)]
     sats = []
     for i in range(0,9):
@@ -72,7 +76,11 @@ def testTwoDice(da, db):
                 good = 0
 
     return good
+
 def main():
+    #The strategy: This is surprisingly simple despite it being the hardest problem in problem 1-100, suppoesedly.
+    #We simnply generate all possible dice arrangements and test them against each other and count the number that work.
+    t0 = time()
     diceA = generateDiceArrangements()
     diceB = list(diceA)
     print(testTwoDice([0, 1, 2, 3, 4, 5], [0, 1, 2, 4, 5, 6]))
@@ -81,6 +89,7 @@ def main():
         for j in range(i,len(diceB)):
             #print(i,j)
             ssum += testTwoDice(diceA[i],diceB[j])
+    print("Time Elapsed:  " + str(time()-t0))
     print(ssum)
 
 main()

@@ -1,3 +1,6 @@
+#Problem: what list of 4 integers (0-9) can produce the most consecutive integers, starting from 1, by using 3 operations and any amount of parentheses?
+
+from time import time
 import math
 
 
@@ -20,6 +23,7 @@ def getPermutations(nlist):
 
 
 def generateOperationList():
+    #generates all possible permutations of  3 integers(mod 4)
     ol = []
     for i in range(0,4):
         for j in range(0,4):
@@ -28,19 +32,26 @@ def generateOperationList():
     return ol
 
 def addf(a,b):
+    #addition function
     return a+b
 def subtractf(a,b):
+    #subtraction
     return a-b
 def multiplyf(a,b):
+    #multiplication
     return a*b
 def dividef(a,b):
+    #division
     if b == 0:
         return 9.183602
     return a*1.0/b
+
 def evaluate(func,a,b):
+    #evaluates a function
     return func(a,b)
 
 def generatePossibleNumbersChain(valList,opPrecs,opList,opMap):
+    #generates all possible numbers from any operations in any order with any parenthesese
     possibleNumsSet = set([])
     numOrderings = getPermutations(valList)
     for v in numOrderings:
@@ -92,6 +103,10 @@ def generatePossibleNumbersChain(valList,opPrecs,opList,opMap):
     return chain
     
 def main():
+    #The strategy: brute force. We simply check all possible expressions for all possible integer sets.
+
+    #Executes accordingly in 
+    t0 = time()
     funcList = [addf,subtractf,multiplyf,dividef]
     operationList = generateOperationList()
     operationPrecedences = [(0,1,2),(0,2,1),(1,0,2),(1,2,0),(2,0,1),(2,1,0)]
@@ -107,5 +122,6 @@ def main():
                         bestChain = tchain
                         bestTuple = (a,b,c,d)
                         print(bestTuple, bestChain)
+    print("Time Elapsed:  " + str(time()-t0))
     print(bestTuple, bestChain)
 main()

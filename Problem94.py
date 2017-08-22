@@ -1,7 +1,14 @@
-
+#The Problem: What is the sum of the perimeters of all almost equilateral triangels with integral side lengths and integral areas with 
+#               perimeter less than or equal to a billion? An almost equilateral triangle is one where the longest and shortest side
+#               differ by exactly one
 from time import time
 
 def main():
+    #The strategy: This is magic. Using some geometry and math, we get to a quadratic expression of an integer n, that, when the expression is square,
+    # corresponds with one integral almost-equilateral triangle. BY completeing the square, we rewrite this expression as a Pell's equation with D=3
+    #Then, using standard Pell techniques to find all solutions, we generate the perimeter of all integral equilateral triangles under perimieter 1 billion.
+
+    #Executes in "0.0" seconds
     t0 = time()
     xi = 2
     yi = 1

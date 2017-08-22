@@ -1,7 +1,10 @@
-
+#The Problem: consider the function s(x) where s(x) is the sum of the divisors of x. An amicable chain is a sequence of numbers a1,a2,a3,...,an
+#               such that a2=s(a1), a3=s(a2) ... a((k+1)%n)=s(a(k)) for k<=n (wraps around). Find the smallest member of the amicable chain
+#               of the greatest length with all terms under 1 million
+#  
+from time import time
 def getFactorList(x):
-    #Produces a list of numbers under x, also tells if they are prime.
-    #this is to create an O(1) prime checker for primes under x 
+    #Produces a list of numbers under x, also shows all factors of those numbers.
     ar = []
     flick = True
     for i in range(-1,x):
@@ -18,6 +21,12 @@ def getFactorList(x):
     return ar
 
 def main():
+    #The strategy: we first create a list of numbers that contain another number: s(x) Now we can traverse the list easily and we never have to find s(x)
+    #               again. Then, we simply check every number whose factor sum s(x) is greater than itself -- all abundant numbers, and we try to find
+    #               the chain length. We keep track of the largest chain and return the smallest element of that chain
+
+    #Executes in 17.7 seconds
+    t0 = time()
     cap = 1000000
     bigFactorList = getFactorList(cap+10)
     factorSums = [0]*(cap+1)
@@ -65,6 +74,7 @@ def main():
             break
     #print(chainLengths[284])
     #print(chainLengths[12496])
+    print("Time Elapsed:  " + str(time()-t0))
     print(firstIndx)
 
 main()

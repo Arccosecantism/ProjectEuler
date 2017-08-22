@@ -1,8 +1,10 @@
 
-import copy
+#Problem:  https://projecteuler.net/problem=98
 import math
+from time import time
 
 def getWords():
+    #gets toe words from a text file
     f = open("TextFiles\\WordListProblem98.txt", 'r')
     lines = f.read()
     words = lines.split("\",\"")
@@ -11,6 +13,8 @@ def getWords():
     return words
 
 def mergeList(alist, blist, compFunc):
+    #merges two lists -- part of merge sort.
+    #compares using an arbitrary compare function
     actr = 0
     bctr = 0
     nlist = []
@@ -36,6 +40,7 @@ def mergeList(alist, blist, compFunc):
     return nlist
 
 def mergeSort(alist, compFunc):
+    #A general merge sort 
     if len(alist) > 1:
         hp = len(alist)//2
         leftList = alist[:hp]
@@ -47,11 +52,14 @@ def mergeSort(alist, compFunc):
         return alist
 
 def compareFunction(a,b):
+    #greater than compare function
     if a > b:
         return False
     return True
 
 def getAlphaValue(cx):
+    #gets alphabetical value of a character: 'a'->0, 'b'->1
+    #'A' -> 0, 'Z' -> 25, numbers are "greater" than letters 
     if cx >= 'a' and cx <= 'z':
         return ord(cx)-ord('a')
     elif cx >= 'A' and cx <= 'Z':
@@ -62,7 +70,8 @@ def getAlphaValue(cx):
          return ord(cx)+36
 
 def checkFirstAlphabetically(strx, stry):
-    #print(strx, stry)
+    #checks if a string is previous alphabetically to another string -- 
+    #if two identical strings are input, it will treat it as "not previous"
     if stry == "":
         return False
     elif strx == "":
@@ -78,17 +87,22 @@ def checkFirstAlphabetically(strx, stry):
         return checkFirstAlphabetically(strx[1:], stry[1:])
 
 def checkOrderedAlpha(strx,stry):
+    #checks for two strings, when completely orderered alphabetically, which one is first alphabetically 
     sx = ''.join(mergeSort(strx, checkFirstAlphabetically))
     sy = ''.join(mergeSort(stry,checkFirstAlphabetically))
     return checkFirstAlphabetically(sx,sy)
 
 def specialAlphaCompare(valx, valy):
+    #cpompares a string based on the alphabetic predcedence of the seconds char
     return checkFirstAlphabetically(valx[1], valy[1])
+
 def getOrderedStr(strx):
+    #returns a string, sorted alphabetically by letter
     return ''.join(mergeSort(strx, checkFirstAlphabetically))
 
 
 def getReducedAnagrams(alist):
+    #from a list of anagrams, gets all position transformations -- generalizes the concept of an anagram
     reducedAnagramList = []
     for i in alist:
         for par in range(2):
@@ -120,6 +134,7 @@ def getReducedAnagrams(alist):
 
 
 def getWordAnagrams(wordList):
+    #from a word list, gets all anagrams
     maxWordLength = 0
     for i in wordList:
         if len(i) > maxWordLength:
@@ -149,6 +164,7 @@ def getWordAnagrams(wordList):
 
 
 def generateSquares(maxLength):
+    #generates a list of squares, separated by digit-amount, up to a maximum length
     lenctr = 0
     squareLists = [[]]
     for i in range(maxLength):
@@ -166,6 +182,7 @@ def generateSquares(maxLength):
 
 
 def testReducedAnagram(ang, squarestr):
+    #tests if a square, after undergoig a character transformation that would result in an anagram if applied to another word, is still a square 
     if len(ang[0]) != len(squarestr):
         return False
     numAsg = []
@@ -197,7 +214,10 @@ def testReducedAnagram(ang, squarestr):
     return False 
     
 def main():
-    
+    #The strategy: we get all the words, find all the anagram pairs, reduce the lsit to the actual transfrmations from one anagram to the next, and 
+    #see if those transformations also apply to square numbers, transforming them into other squares. Keep track of the largest square
+    #Executes in 3.156 seconds
+    t0 = time()
     reducedAnagrams = getReducedAnagrams(getWordAnagrams(getWords()))
     maxLength = 0
     for i in reducedAnagrams:
@@ -216,16 +236,9 @@ def main():
                 if testResult:
                     print(i, ix, math.sqrt(ix))
                     maxNum = ix
-
+    print("Time Elapsed:  " + str(time()-t0))
     print(maxNum)
-            
-    
 
-
-    '''tlist = [3,6,4,7,4,8,2,6,4,4,5,7,0,1,2]
-    mlist = [1,2,3]
-    nlist = [2,4,5]
-    #print(mergeSort(["bapple", "apple", "bap", "app", "burple", "2apple", "--apple", "2burple"] , checkFirstAlphabetically))'''
    
 main()
 

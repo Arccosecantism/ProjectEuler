@@ -1,15 +1,11 @@
-#Problem: 	Find the "path" (moving only down or down-right) in the trignle in "TriangleProblem67.txt" 
-#			that has the maximum sum compared to all other paths. What is this sum? (It might help to look at https://projecteuler.net/problem=18)
-#		
-#			This problem is almopst exactly the same as problem 18, except the triangle I have to search is much bigger, so I can't check every path -- I 
-#			need a better algorithm
+#Problem: 	Find the "path" (moving only down or right) in the 80x80 number matrix in "MatrixTwoWayProblem81.txt" that has the minimum sum of contained nodes
 import math
 import os
 from time import time
 
 def getNumMatrix():
 
-	#gets the list of numbers from "TriangleProblem67.txt"
+	#gets the number matrix from "MatrixTwoWayProblem81.txt"
 	print(os.getcwd())
 	f = open("TextFiles\\MatrixTwoWayProblem81.txt", 'r')
 	lines = f.readlines()
@@ -40,9 +36,9 @@ def getRightNode(i, k, matrix):
 		return [-1,-1]
 	return [i, k+1] 
 
-def findGreatestSum(i, k, numMatrix, sumMatrix):
-	#recursively finds the greatest sum: it looks at the sums in [i][k]'s two children 
-	#and picks the bigger one and adds its value to it to figure out its own max sum
+def findSmallestSum(i, k, numMatrix, sumMatrix):
+	#recursively finds the smallest sum: it looks at the sums in [i][k]'s two children 
+	#and picks the one with the smaller min path sum and adds its matrix value to it to figure out its own min sum
 	#If the children don't know their sum, recurse once on each child.
 	#So it's not total brute-force: it remembers values that it has already calculated
 	
@@ -58,9 +54,9 @@ def findGreatestSum(i, k, numMatrix, sumMatrix):
 				rn = getRightNode(i,k,numMatrix)
 				
 				if dn != [-1,-1]:
-					findGreatestSum(dn[0],dn[1],numMatrix,sumMatrix)
+					findSmallestSum(dn[0],dn[1],numMatrix,sumMatrix)
 				if rn != [-1,-1]:
-					findGreatestSum(rn[0],rn[1],numMatrix,sumMatrix)
+					findSmallestSum(rn[0],rn[1],numMatrix,sumMatrix)
 				
 				dval = -1
 				if dn != [-1,-1]:
@@ -70,17 +66,17 @@ def findGreatestSum(i, k, numMatrix, sumMatrix):
 					rval = sumMatrix[rn[0]][rn[1]]
 				
 				#print(i,k,numTriangle[i][k][0],vlc,vrc)
-				maxVal = 0
+				minVal = 0
 				
 				if not(dval == -1 and rval == -1):
 					if dval == -1:
-						maxVal = rval
+						minVal = rval
 					elif rval == -1:
-						maxVal = dval
+						minVal = dval
 					else:
-						maxVal = min(rval,dval)
+						minVal = min(rval,dval)
 						
-					sumMatrix[i][k] = numMatrix[i][k]+maxVal
+					sumMatrix[i][k] = numMatrix[i][k]+minVal
 	else:
 		print("ERROR")
 			
@@ -88,7 +84,7 @@ def findGreatestSum(i, k, numMatrix, sumMatrix):
 
 
 def main():
-	#see findGreatestSum for algorithm -- main simply calls it and prints the answer. THe way I solved the problem the first time
+	#see findSmallestSum for algorithm -- main simply calls it and prints the answer. The way I solved the problem the first time
 	#worked for this problem, because I used some caching -- the program remembered previously calculated sums
 	#Executes in .09 seconds
 	t0 = time()
@@ -99,7 +95,7 @@ def main():
 		for j in range(0,len(numberMatrix[i])):
 			pathMatrix[-1].append(0)
 	#pathMatrix[3][1] = 2
-	findGreatestSum(0,0,numberMatrix, pathMatrix)
+	findSmallestSum(0,0,numberMatrix, pathMatrix)
 	print("Time Elapsed:", time()-t0)
 	'''for i in numberMatrix:
 		print(i)

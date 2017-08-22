@@ -1,8 +1,11 @@
+#NOTe: THERE IS AN ISSUE -- IT WORKS BUT ONE OF THE METHODS FAILS!!
+# The problem: solve 50 sudokus in a text file, and find the sum of the three-digit numbers in the top left corner of each puzzle 
+
 import math
 from time import time
 
 def getPuzzles():
- 
+    #gets the sudokus from the text file
     f = open("TextFiles\\SudokuProblem96.txt", 'r')
     lines = f.read()
     pregridsa = lines.split("Grid ")
@@ -27,11 +30,13 @@ def getPuzzles():
     
 
 def getIncompleteConstraintIndeces(square, sudoku):
+    #returns the indeces of all undetermined (even paritally) squares that are directly affected by a given square
     return (getIncompleteRowIndeces(square, sudoku)|
             getIncompleteColumnIndeces(square, sudoku)|
             getIncompleteBoxIndeces(square, sudoku))
 
 def getIncompleteRowIndeces(square, sudoku):
+    #returns the indeces of all undetermined (even paritally) squares in the same row as a given square
     rset = set([])
     for i in range(9):
         if len(sudoku[square[0]][i]) > 1:
@@ -39,6 +44,7 @@ def getIncompleteRowIndeces(square, sudoku):
     return rset
 
 def getIncompleteColumnIndeces(square, sudoku):
+    #returns the indeces of all undetermined (even paritally) squares in the same column as a given square
     rset = set([])
     for i in range(9):
         if len(sudoku[i][square[1]]) > 1:
@@ -46,6 +52,7 @@ def getIncompleteColumnIndeces(square, sudoku):
     return rset
 
 def getIncompleteBoxIndeces(square, sudoku):
+    #returns the indeces of all undetermined (even paritally) squares in the same box as a given square
     rset = set([])
     tr = (3*(square[0]//3),3*(square[1]//3))
     for i in range(tr[0],tr[0]+3):
@@ -55,6 +62,7 @@ def getIncompleteBoxIndeces(square, sudoku):
     return rset
 
 def RCBSimplification(sudoku):
+    #row-collumn-box simplification: essentially "bookkeeping" -- crossing out numbers that are no longer possible
     changed = False
     cset = getCompleteIndeces(sudoku)
     while cset != set([]):
@@ -69,6 +77,7 @@ def RCBSimplification(sudoku):
     return changed
 
 def getCompleteIndeces(sudoku):
+    #return the indeces of all squares that are completely determined
     rset = set([])
     for i in range(9):
         for j in range(9):
@@ -77,6 +86,7 @@ def getCompleteIndeces(sudoku):
     return rset
 
 def tupleSimplificationB(tset, sudoku):
+    #part b of tuple-simplification: finds all tuples of a set of partially undetermined squares
     changed = False
     sl = int(len(tset))
     tlist = list(tset)
@@ -106,6 +116,7 @@ def tupleSimplificationB(tset, sudoku):
     return changed
 
 def tupleSimplificationA(sudoku):
+    #Part a of tuple-simplification: tests a square against all n-tuplets in the same row, collumn, box
     changed = False
     for i in range(9):
         rs = getIncompleteRowIndeces((i,0),sudoku)
@@ -121,6 +132,7 @@ def tupleSimplificationA(sudoku):
     return changed
 
 def printSudoku(sudoku):
+    #prints a sudoku in a nice way
     for i in range(9):
         print(sudoku[i])
         print("-")
@@ -128,6 +140,7 @@ def printSudoku(sudoku):
     print("*****")
 
 def testSudokuFinish(sudoku):
+    #tests if a sudoku has been completed, incomplete, or broken
     for i in range(9):
         for j in range(9):
             if len(sudoku[i][j]) > 1:
@@ -138,10 +151,12 @@ def testSudokuFinish(sudoku):
         return 2
 
 def setSudoku(sa, sb):
+    #resets a sudoku to a different one
     for i in range(9):
         for j in range(9):
             sa[i][j] = set(sb[i][j])
 def copySudoku(sa):
+    #"deep-copies" a sudoku -- otherwise list references kill you
     rs = []
     for i in range(9):
         rs.append([])
@@ -150,6 +165,8 @@ def copySudoku(sa):
     return rs
 
 def solveSudoku(sudoku, backtracks, resets):
+    #solves a sudoku by applying RCB simnplification and when that doesn't work, tupleSimplificationA, and when that doesn't work, 
+    # guessing and backtracking 
     done = False
     fail = False
     split = False
@@ -190,6 +207,7 @@ def solveSudoku(sudoku, backtracks, resets):
         solveSudoku(sudoku,backtracks,resets)
         
 def badcheck(sudoku):
+    #tests if a sudoku contains an error
     for i in range(9):
         ta = [0,0,0,0,0,0,0,0,0]
         for j in range(9):
@@ -229,6 +247,11 @@ def badcheck(sudoku):
     return True
         
 def main():
+    #The strategy: we solve a sudoku by doing progressively finer and finer tests. Then we simply do this for all sudokus, find the 
+    #top-left 3-digit number and sum them
+
+    #executes in 3.17 seconds
+    t0 = time()
     puzzles = getPuzzles()
     for i in puzzles:
         solveSudoku(i,[],[])
@@ -253,5 +276,6 @@ def main():
             tval = int(str(i[0][0].pop())+str(i[0][1].pop())+str(i[0][2].pop()))
         
         ssum += tval
+    print("Time Elapsed:  " + str(time()-t0))
     print(ssum)
 main()

@@ -1,8 +1,12 @@
 
+#Problem: let S(x) be the sum of the squares of a number's digits in base 10. Continued calling of this function 
+#           S(S(S(S(S(S(S(S.....(S(X))))))))) will ALWAYS either result in 1 or 89. How many numbers x under 10 million
+#          become 89 through repeated function calls?
+from time import time
 
 def getDigitSquareSum(x):
 
-    #gets the sum of the factorials of x's digits
+    #gets the sum of the squares of x's digits
     
     ssum = 0
     sx = str(x)
@@ -106,29 +110,37 @@ def getDigitsStarsBars(stars):
     return digitLists
 
 def main():
+    #The strategy: Since there are many fewer unique multisets of digits of numbers less than ten million than there are numbers less than
+    #ten million. What we do is generate a list of all possible digit multisets under ten million, and we also make a 244-long list (244 is 1+3*9^2
+    # -- square digit sums of 3 digit numbers are guarenteed to be less than 244 -- 3 digits because 9^2*7 is 3 digits). The 244-long list,
+    #in the nth spot, contains the square digit sum of n. We then keep finding the square digit sum of the 244-long list. All end up at 89 or 1.
+    #Then we simply take each digit family, find the square digit sum of the square digit sum of it, and then check if the result ends up with 89 when 
+    #continued. We then add the number of numbers that can be represented by that family of digts to a counter
+
+
+    #Executes in 1.89 seconds
     
+    t0 = time()
     digitFamilies = getDigitsStarsBars(7)
-    squareSumList = [0]*244
-    for i in range(1,244):
+    ncap = 244
+    squareSumList = [0]*ncap
+    for i in range(1,ncap):
         if i == 89:
             squareSumList[i] = 89
         else:
             squareSumList[i] = getDigitSquareSum(i)
 
-    for i in range(1,244):
+    for i in range(1,ncap):
         while squareSumList[i] != 89 and squareSumList[i] != 1:
             squareSumList[i] = squareSumList[squareSumList[i]]
-    #print(squareSumList)
 
     ssum = 0
-    #testAr = [0,0,0,0,0,1,1]
-    #print(testAr, getNumberOfOrders(testAr))
     for i in digitFamilies:
         fac = getNumberOfOrders(i)
         occ = digitFamilyToNum(i)
-        #print(i,occ,fac)
         start = getDigitSquareSum(getDigitSquareSum(occ))
         if squareSumList[start] == 89:
             ssum += fac
+    print("Time Elapsed:  " + str(time()-t0))
     print(ssum)
 main()
